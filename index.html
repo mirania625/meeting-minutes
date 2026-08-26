@@ -763,8 +763,14 @@
         </div>
 
         <div class="form-group">
-          <label>내가 만든 회의 분류 관리</label>
-          <div id="custom-cat-manager-list" style="display:flex; flex-direction:column; gap:6px; max-height:140px; overflow-y:auto; padding:4px 0;"></div>
+          <label><i class="fa-solid fa-book-bookmark"></i> 사내 주요 용어 & 고유명사 사전</label>
+          <textarea id="glossary-input" style="width:100%; height:75px; padding:10px 12px; background:var(--bg-input); border:1px solid var(--border-color); border-radius:var(--radius-md); color:#fff; font-size:12.5px; font-family:inherit; resize:none;" placeholder="자주 쓰는 전문용어, 프로젝트명, 인명을 쉼표(,)로 입력 (예: PG사, Jira, SSO, VOC, 홍길동, 김개발)"></textarea>
+          <p class="form-help">등록된 용어는 모든 음성/텍스트 분석 시 AI에게 힌트로 자동 제공되어 인식률이 대폭 향상됩니다.</p>
+        </div>
+
+        <div class="form-group">
+          <label><i class="fa-solid fa-folder-open"></i> 내가 만든 회의 분류 관리</label>
+          <div id="custom-cat-manager-list" style="display:flex; flex-direction:column; gap:6px; max-height:120px; overflow-y:auto; padding:4px 0;"></div>
         </div>
 
         <button id="btn-save-key" class="btn btn-primary btn-full" type="button"><i class="fa-solid fa-check"></i> 설정 저장</button>
@@ -782,6 +788,7 @@
 
     const state = {
       apiKey: localStorage.getItem("MEETAI_API_KEY") || "",
+      glossary: localStorage.getItem("MEETAI_GLOSSARY") || "",
       meetings: JSON.parse(localStorage.getItem("MEETAI_MEETINGS") || "[]"),
       categories: JSON.parse(localStorage.getItem("MEETAI_CATEGORIES") || "[]"),
       currentFilter: "전체",
@@ -870,6 +877,7 @@
       btnCloseSettings: document.getElementById('btn-close-settings'),
       btnSaveKey: document.getElementById('btn-save-key'),
       apiKeyInput: document.getElementById('api-key-input'),
+      glossaryInput: document.getElementById('glossary-input'),
       btnToggleKeyVisibility: document.getElementById('btn-toggle-key-visibility'),
       customCatManagerList: document.getElementById('custom-cat-manager-list')
     };
@@ -883,6 +891,7 @@
       renderMeetings();
       drawEmptyWaveform();
       el.apiKeyInput.value = state.apiKey;
+      if (el.glossaryInput) el.glossaryInput.value = state.glossary;
     });
 
     function initListeners() {
@@ -973,10 +982,16 @@
       // Settings Save
       el.btnSaveKey.addEventListener('click', () => {
         const key = el.apiKeyInput.value.trim();
+        const glossary = el.glossaryInput.value.trim();
+        
         state.apiKey = key;
+        state.glossary = glossary;
+        
         localStorage.setItem('MEETAI_API_KEY', key);
+        localStorage.setItem('MEETAI_GLOSSARY', glossary);
+        
         el.settingsModal.classList.remove('active');
-        showToast('🔑 설정이 저장되었습니다.');
+        showToast('🔑 설정 및 용어 사전이 저장되었습니다.');
       });
 
       el.btnToggleKeyVisibility.addEventListener('click', () => {
@@ -1031,6 +1046,7 @@
 
     function openSettingsModal() {
       el.apiKeyInput.value = state.apiKey;
+      if (el.glossaryInput) el.glossaryInput.value = state.glossary;
       if (state.categories.length === 0) {
         el.customCatManagerList.innerHTML = '<p class="text-muted" style="font-size:12px; padding:4px 0;">등록된 분류가 없습니다. 상단 [+ 분류] 버튼으로 추가하세요.</p>';
       } else {
@@ -1484,7 +1500,14 @@
 
       const base64Data = await blobToBase64(audioBlob);
       const mimeType = audioBlob.type || "audio/webm";
-      const promptText = `이 회의 오디오를 듣고 회의를 소주제(Topic)별로 상세히 나누어 풍부한 논의 내용과 결정 사항, 할 일을 JSON 형식으로 작성해주세요.\n${userHint ? `[사용자 힌트]: ${userHint}` : ''}`;
+
+      let promptText = `이 회의 오디오를 듣고 회의를 소주제(Topic)별로 상세히 나누어 풍부한 논의 내용과 결정 사항, 할 일을 JSON 형식으로 작성해주세요.`;
+      if (state.glossary) {
+        promptText += `\n[사내 주요 전문 용어 / 고유명사 / 인명 사전 (반드시 우선 반영)]: ${state.glossary}`;
+      }
+      if (userHint) {
+        promptText += `\n[사용자 추가 힌트]: ${userHint}`;
+      }
 
       const candidateModels = ["gemini-3.6-flash", "gemini-3.7-flash", "gemini-flash-latest", "gemini-2.5-flash-lite"];
       let lastError = null;
@@ -1532,7 +1555,13 @@
         throw new Error("Google Gemini API 키가 필요합니다. 설정 창에 키를 입력하고 [설정 저장]을 눌러주세요.");
       }
 
-      const promptText = `다음 회의 텍스트를 면밀히 분석하여 소주제(Topic)별 상세 논의 내용, 주요 결정 사항, 실행 과제를 JSON 형식으로 작성해주세요:\n\n${textContext}\n${userHint ? `\n[사용자 힌트]: ${userHint}` : ''}`;
+      let promptText = `다음 회의 텍스트를 면밀히 분석하여 소주제(Topic)별 상세 논의 내용, 주요 결정 사항, 실행 과제를 JSON 형식으로 작성해주세요:\n\n${textContext}`;
+      if (state.glossary) {
+        promptText += `\n\n[사내 주요 전문 용어 / 고유명사 / 인명 사전 (반드시 우선 반영)]: ${state.glossary}`;
+      }
+      if (userHint) {
+        promptText += `\n[사용자 추가 힌트]: ${userHint}`;
+      }
 
       const candidateModels = ["gemini-3.6-flash", "gemini-3.7-flash", "gemini-flash-latest", "gemini-2.5-flash-lite"];
       let lastError = null;
