@@ -682,7 +682,7 @@
         <button id="btn-detail-back" class="icon-btn" type="button"><i class="fa-solid fa-arrow-left"></i></button>
         <div class="detail-top-title">회의록 상세</div>
         <div class="detail-nav-actions">
-          <button id="btn-copy-markdown" class="icon-btn" type="button" title="마크다운 복사"><i class="fa-solid fa-copy"></i></button>
+          <button id="btn-copy-markdown" class="icon-btn" type="button" title="상세 요약 복사"><i class="fa-solid fa-copy"></i></button>
           <button id="btn-delete-meeting" class="icon-btn text-danger" type="button" title="삭제"><i class="fa-solid fa-trash"></i></button>
         </div>
       </div>
@@ -1805,32 +1805,30 @@
     function copyMeetingAsMarkdown() {
       const m = state.selectedMeeting;
       if (!m) return;
-      let md = `# [회의록] ${m.title}\n\n- **일시**: ${m.meeting_date}\n- **분류**: ${m.category}\n- **태그**: ${(m.tags || []).join(' ')}\n\n`;
-      
-      if (m.overview) {
-        md += `## 📋 회의 전체 개요\n${m.overview}\n\n`;
-      }
+
+      let text = `[회의 개요]\n${m.overview || ''}\n\n`;
 
       if (m.topic_summaries && m.topic_summaries.length > 0) {
-        md += `## 📑 소주제별 상세 논의 내용\n`;
-        m.topic_summaries.forEach(t => {
-          md += `### ${t.topic}\n`;
-          (t.points || []).forEach(p => { md += `- ${p}\n`; });
-          md += `\n`;
+        text += `[소주제별 상세 논의 내용]\n`;
+        m.topic_summaries.forEach((t, idx) => {
+          text += `${t.topic}\n`;
+          (t.points || []).forEach(p => {
+            text += `• ${p}\n`;
+          });
+          text += `\n`;
         });
       } else if (m.summary_3lines && m.summary_3lines.length > 0) {
-        md += `## 📋 요약\n` + m.summary_3lines.map(s => `- ${s}`).join('\n') + `\n\n`;
+        text += `[요약 내용]\n` + m.summary_3lines.map(s => `• ${s}`).join('\n') + `\n\n`;
       }
 
-      md += `## 🎯 주요 결정 사항\n` + (m.key_decisions || []).map(d => `- ${d}`).join('\n') + `\n\n`;
-      md += `## ✅ Action Items\n` + (m.action_items || []).map(a => `- [${a.done ? 'x' : ' '}] **${a.task}** (${a.assignee} / ${a.due_date})`).join('\n') + `\n\n`;
-      
-      if (m.transcript && m.transcript.length > 0) {
-        md += `## 🎙️ 전체 대화 스크립트\n` + m.transcript.map(t => `**[${t.time}] ${t.speaker}**: ${t.text}`).join('\n\n');
+      if (m.key_decisions && m.key_decisions.length > 0) {
+        text += `[주요 결정 사항]\n` + m.key_decisions.map(d => `• ${d}`).join('\n') + `\n\n`;
       }
 
-      navigator.clipboard.writeText(md).then(() => {
-        showToast('📋 노션/슬랙용 마크다운이 복사되었습니다!');
+      navigator.clipboard.writeText(text.trim()).then(() => {
+        showToast('📋 상세 요약 내용이 복사되었습니다!');
+      }).catch(err => {
+        alert('복사 실패: ' + err.message);
       });
     }
 
