@@ -1292,43 +1292,62 @@
 
       const promptText = `이 회의 오디오를 듣고 화자 분리, 대화 스크립트, 3줄 핵심 요약, 주요 결정 사항, 액션 아이템을 JSON 형식으로 작성해주세요.\n${userHint ? `[사용자 힌트]: ${userHint}` : ''}`;
 
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+      const candidateModels = [
+        "gemini-3.6-flash",
+        "gemini-3.7-flash",
+        "gemini-flash-latest",
+        "gemini-2.5-flash-lite",
+        "gemini-3.5-flash",
+        "gemini-2.5-flash"
+      ];
+      let lastError = null;
 
-      const payload = {
-        contents: [
-          {
-            parts: [
+      for (const modelName of candidateModels) {
+        try {
+          const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
+
+          const payload = {
+            contents: [
               {
-                inline_data: {
-                  mime_type: mimeType.split(';')[0],
-                  data: base64Data
-                }
-              },
-              {
-                text: promptText
+                parts: [
+                  {
+                    inline_data: {
+                      mime_type: mimeType.split(';')[0],
+                      data: base64Data
+                    }
+                  },
+                  {
+                    text: promptText
+                  }
+                ]
               }
-            ]
+            ],
+            systemInstruction: {
+              parts: [{ text: SYSTEM_PROMPT }]
+            }
+          };
+
+          const res = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+
+          if (!res.ok) {
+            const err = await res.json();
+            throw new Error(err.error?.message || `API 요청 실패 (${res.status})`);
           }
-        ],
-        systemInstruction: {
-          parts: [{ text: SYSTEM_PROMPT }]
+
+          const data = await res.json();
+          const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+          return parseJsonResponse(responseText);
+        } catch (err) {
+          console.warn(`[${modelName} 호출 실패, 다음 모델로 재시도]:`, err);
+          lastError = err;
         }
-      };
-
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
-
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error?.message || `API 요청 실패 (${res.status})`);
       }
 
-      const data = await res.json();
-      const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
-      return parseJsonResponse(responseText);
+      throw lastError || new Error("Gemini AI 모델 분석에 실패했습니다.");
     }
 
     function parseJsonResponse(raw) {
