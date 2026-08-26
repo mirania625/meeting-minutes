@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>MeetAI - 서버 없는 스마트 회의 비서</title>
+  <title>MeetAI - 나만의 AI 회의 비서</title>
   <meta name="theme-color" content="#0B0F19">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -90,7 +90,7 @@
 
     /* Top Header */
     .app-header {
-      padding: 18px 20px 14px 20px;
+      padding: 16px 20px 12px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -111,8 +111,7 @@
       background: linear-gradient(135deg, #FFFFFF, #CBD5E1);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
-    .brand-subtitle { font-size: 11px; color: var(--accent-cyan); font-weight: 600; display: flex; align-items: center; gap: 4px; }
-    .standalone-tag { background: rgba(6, 182, 212, 0.15); padding: 1px 6px; border-radius: var(--radius-full); font-size: 9.5px; border: 1px solid rgba(6, 182, 212, 0.3); }
+    .brand-subtitle { font-size: 11px; color: var(--accent-cyan); font-weight: 600; }
     .header-actions { display: flex; gap: 8px; }
 
     .icon-btn {
@@ -121,7 +120,7 @@
       color: var(--text-secondary); display: flex; align-items: center; justify-content: center;
       cursor: pointer; transition: all 0.2s ease;
     }
-    .icon-btn:hover { background: var(--bg-card-hover); color: var(--text-primary); border-color: var(--primary); }
+    .icon-btn:hover, .icon-btn:active { background: var(--bg-card-hover); color: var(--text-primary); border-color: var(--primary); }
     .icon-btn.text-danger:hover { color: var(--accent-rose); border-color: var(--accent-rose); }
     .icon-btn-sm {
       width: 32px; height: 32px; border-radius: var(--radius-full);
@@ -132,7 +131,7 @@
     /* Search & Filter Bar */
     .search-section {
       padding: 12px 18px 8px 18px;
-      display: flex; flex-direction: column; gap: 12px;
+      display: flex; flex-direction: column; gap: 10px;
       background: var(--bg-main); z-index: 5;
     }
     .search-box { position: relative; display: flex; align-items: center; }
@@ -146,24 +145,34 @@
     .search-box input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }
     .clear-btn { position: absolute; right: 12px; background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 4px; }
 
-    .category-tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+    /* Custom Category Scrollable Chips */
+    .category-section-row {
+      display: flex; align-items: center; gap: 8px;
+    }
+    .category-tabs {
+      display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; flex: 1;
+    }
     .category-tabs::-webkit-scrollbar { display: none; }
     .cat-chip {
       flex-shrink: 0; display: flex; align-items: center; gap: 6px;
-      padding: 7px 13px; background: var(--bg-card); border: 1px solid var(--border-color);
+      padding: 6px 12px; background: var(--bg-card); border: 1px solid var(--border-color);
       border-radius: var(--radius-full); color: var(--text-secondary); font-size: 12.5px;
       font-weight: 500; cursor: pointer; transition: all 0.2s ease;
     }
-    .cat-chip .count-badge { background: rgba(255, 255, 255, 0.08); font-size: 10px; padding: 1px 6px; border-radius: var(--radius-full); }
     .cat-chip.active {
-      background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(168, 85, 247, 0.2));
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(168, 85, 247, 0.25));
       border-color: var(--primary); color: #fff; font-weight: 600;
     }
-    .cat-chip.active .count-badge { background: var(--primary); color: #fff; }
+    .btn-add-category {
+      flex-shrink: 0; padding: 6px 10px; background: rgba(99, 102, 241, 0.1);
+      border: 1px dashed var(--primary); border-radius: var(--radius-full);
+      color: var(--primary); font-size: 12px; font-weight: 600; cursor: pointer;
+      display: flex; align-items: center; gap: 4px;
+    }
 
     /* Main Meeting List */
     .main-content {
-      flex: 1; overflow-y: auto; padding: 8px 18px 100px 18px;
+      flex: 1; overflow-y: auto; padding: 8px 18px 110px 18px;
       display: flex; flex-direction: column; gap: 12px;
     }
     .list-header { display: flex; justify-content: space-between; align-items: center; padding: 4px 2px; }
@@ -183,14 +192,10 @@
       transform: translateY(-2px); box-shadow: var(--shadow-sm);
     }
     .card-top-row { display: flex; justify-content: space-between; align-items: center; }
-    .card-category-badge { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: var(--radius-full); }
-
-    .cat-sprint { background: rgba(99, 102, 241, 0.15); color: #818CF8; border: 1px solid rgba(99, 102, 241, 0.3); }
-    .cat-client { background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3); }
-    .cat-plan   { background: rgba(245, 158, 11, 0.15); color: #FBBF24; border: 1px solid rgba(245, 158, 11, 0.3); }
-    .cat-oneonone { background: rgba(168, 85, 247, 0.15); color: #C084FC; border: 1px solid rgba(168, 85, 247, 0.3); }
-    .cat-general { background: rgba(148, 163, 184, 0.15); color: #CBD5E1; border: 1px solid rgba(148, 163, 184, 0.3); }
-
+    .card-category-badge {
+      font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: var(--radius-full);
+      background: rgba(99, 102, 241, 0.15); color: #818CF8; border: 1px solid rgba(99, 102, 241, 0.3);
+    }
     .card-meta-time { font-size: 11.5px; color: var(--text-muted); display: flex; align-items: center; gap: 4px; }
     .card-title { font-size: 15.5px; font-weight: 700; line-height: 1.4; color: var(--text-primary); }
     .card-summary-preview {
@@ -223,17 +228,18 @@
     /* Floating Action Button */
     .fab-container {
       position: absolute; bottom: 22px; left: 0; right: 0;
-      display: flex; justify-content: center; pointer-events: none; z-index: 20;
+      display: flex; justify-content: center; z-index: 50;
+      padding: 0 20px;
     }
     .fab-record {
-      pointer-events: auto; display: flex; align-items: center; gap: 10px;
-      padding: 14px 24px; background: linear-gradient(135deg, #6366F1, #8B5CF6);
+      display: flex; align-items: center; gap: 10px;
+      padding: 15px 28px; background: linear-gradient(135deg, #6366F1, #8B5CF6);
       color: #fff; border: none; border-radius: var(--radius-full);
       font-size: 15px; font-weight: 700; font-family: inherit; cursor: pointer;
       box-shadow: 0 10px 25px rgba(99, 102, 241, 0.5); position: relative;
       transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .fab-record:hover, .fab-record:active { transform: scale(1.05); }
+    .fab-record:active { transform: scale(0.96); }
     .pulse-ring {
       position: absolute; top: -4px; left: -4px; right: -4px; bottom: -4px;
       border-radius: var(--radius-full); border: 2px solid var(--primary); opacity: 0.6;
@@ -249,17 +255,16 @@
     .modal-backdrop {
       position: absolute; top: 0; left: 0; right: 0; bottom: 0;
       background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(8px);
-      z-index: 100; display: flex; align-items: flex-end; opacity: 0; pointer-events: none;
-      transition: opacity 0.3s ease;
+      z-index: 100; display: none; align-items: flex-end; opacity: 0;
+      transition: opacity 0.25s ease;
     }
-    .modal-backdrop.active { opacity: 1; pointer-events: auto; }
+    .modal-backdrop.active { display: flex; opacity: 1; }
     .record-sheet {
       width: 100%; background: var(--bg-sheet); border-top-left-radius: 28px; border-top-right-radius: 28px;
       border: 1px solid var(--border-color); padding: 16px 20px 30px 20px; display: flex;
-      flex-direction: column; gap: 16px; transform: translateY(100%);
-      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.6);
+      flex-direction: column; gap: 14px; box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.6);
+      max-height: 90vh; overflow-y: auto;
     }
-    .modal-backdrop.active .record-sheet { transform: translateY(0); }
     .sheet-handle { width: 40px; height: 4px; background: rgba(255, 255, 255, 0.2); border-radius: var(--radius-full); margin: 0 auto 4px auto; }
     .record-header { display: flex; justify-content: space-between; align-items: center; }
     .rec-badge { display: flex; align-items: center; gap: 8px; background: rgba(255, 255, 255, 0.06); padding: 5px 12px; border-radius: var(--radius-full); font-size: 12px; font-weight: 600; }
@@ -272,29 +277,39 @@
       padding: 16px; display: flex; flex-direction: column; align-items: center; gap: 10px;
     }
     .timer-display { font-family: var(--font-brand); font-size: 34px; font-weight: 700; color: #fff; }
-    #waveform-canvas { width: 100%; height: 80px; border-radius: var(--radius-sm); }
-    .mic-hint { font-size: 12px; color: var(--text-muted); }
+    #waveform-canvas { width: 100%; height: 75px; border-radius: var(--radius-sm); }
+    .mic-hint { font-size: 12px; color: var(--text-muted); text-align: center; }
+
+    /* Category Selector in Recording Modal */
+    .form-group-custom {
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .form-group-custom label { font-size: 12px; font-weight: 600; color: var(--text-secondary); }
+    .cat-select-row {
+      display: flex; gap: 8px; align-items: center;
+    }
+    .cat-select-row select {
+      flex: 1; padding: 10px 14px; background: var(--bg-input); border: 1px solid var(--border-color);
+      border-radius: var(--radius-md); color: var(--text-primary); font-size: 13px; font-family: inherit; outline: none;
+    }
+    .cat-select-row input {
+      flex: 1; padding: 10px 14px; background: var(--bg-input); border: 1px solid var(--border-color);
+      border-radius: var(--radius-md); color: var(--text-primary); font-size: 13px; font-family: inherit; outline: none;
+    }
 
     .recording-bookmarks { background: var(--bg-main); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 10px 14px; }
     .bookmark-header { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--accent-amber); font-weight: 600; margin-bottom: 6px; }
     .bookmark-chips { display: flex; gap: 6px; flex-wrap: wrap; }
     .bookmark-chip { background: rgba(245, 158, 11, 0.15); color: #FBBF24; border: 1px solid rgba(245, 158, 11, 0.3); font-size: 11px; padding: 2px 8px; border-radius: var(--radius-full); }
 
-    .record-input-group input {
-      width: 100%; padding: 12px 16px; background: var(--bg-input);
-      border: 1px solid var(--border-color); border-radius: var(--radius-md);
-      color: var(--text-primary); font-size: 13px; font-family: inherit; outline: none;
-    }
-    .record-input-group input:focus { border-color: var(--primary); }
-
-    .record-controls { display: flex; justify-content: space-around; align-items: center; padding: 10px 0; }
+    .record-controls { display: flex; justify-content: space-around; align-items: center; padding: 6px 0; }
     .btn-tool {
       display: flex; flex-direction: column; align-items: center; gap: 6px;
       background: none; border: none; color: var(--text-secondary); font-size: 11px;
       font-family: inherit; cursor: pointer; transition: all 0.2s ease;
     }
     .btn-tool i {
-      font-size: 20px; width: 44px; height: 44px; border-radius: var(--radius-full);
+      font-size: 18px; width: 44px; height: 44px; border-radius: var(--radius-full);
       background: var(--bg-card); border: 1px solid var(--border-color);
       display: flex; align-items: center; justify-content: center;
     }
@@ -304,7 +319,7 @@
       background: linear-gradient(135deg, #EF4444, #DC2626);
       border: 4px solid rgba(255, 255, 255, 0.15); color: #fff; font-size: 26px;
       display: flex; align-items: center; justify-content: center; cursor: pointer;
-      box-shadow: 0 0 20px rgba(239, 68, 68, 0.5); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 0 20px rgba(239, 68, 68, 0.5); transition: all 0.2s ease;
     }
     .btn-circle-record.recording { background: linear-gradient(135deg, #F59E0B, #D97706); box-shadow: 0 0 20px rgba(245, 158, 11, 0.5); }
 
@@ -343,10 +358,9 @@
     /* Meeting Detail Full Page */
     .detail-page-modal {
       position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg-main);
-      z-index: 150; display: flex; flex-direction: column; transform: translateX(100%);
-      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 150; display: none; flex-direction: column;
     }
-    .detail-page-modal.active { transform: translateX(0); }
+    .detail-page-modal.active { display: flex; }
     .detail-top-nav {
       padding: 16px 18px; display: flex; justify-content: space-between; align-items: center;
       border-bottom: 1px solid var(--border-color); background: rgba(11, 15, 25, 0.95); backdrop-filter: blur(12px);
@@ -357,7 +371,10 @@
 
     .meeting-meta-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 18px; display: flex; flex-direction: column; gap: 10px; }
     .meta-category-row { display: flex; justify-content: space-between; align-items: center; }
-    .detail-cat-badge { font-size: 11.5px; font-weight: 600; padding: 4px 10px; border-radius: var(--radius-full); }
+    .detail-cat-badge {
+      font-size: 11.5px; font-weight: 600; padding: 4px 12px; border-radius: var(--radius-full);
+      background: rgba(99, 102, 241, 0.15); color: #818CF8; border: 1px solid rgba(99, 102, 241, 0.3); cursor: pointer;
+    }
     .detail-date { font-size: 12px; color: var(--text-muted); }
     .detail-title { font-size: 18px; font-weight: 700; line-height: 1.4; }
     .detail-tags { display: flex; gap: 6px; flex-wrap: wrap; }
@@ -415,10 +432,8 @@
     .settings-card {
       width: 100%; background: var(--bg-sheet); border-top-left-radius: 28px; border-top-right-radius: 28px;
       border: 1px solid var(--border-color); padding: 20px 20px 30px 20px; display: flex;
-      flex-direction: column; gap: 16px; transform: translateY(100%);
-      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      flex-direction: column; gap: 16px; max-height: 85vh; overflow-y: auto;
     }
-    .modal-backdrop.active .settings-card { transform: translateY(0); }
     .form-group { display: flex; flex-direction: column; gap: 6px; }
     .form-group label { font-size: 12.5px; font-weight: 600; color: var(--text-secondary); }
     .input-with-icon { position: relative; display: flex; align-items: center; }
@@ -454,16 +469,11 @@
         </div>
         <div>
           <h1 class="brand-title">MeetAI</h1>
-          <p class="brand-subtitle">
-            스마트 회의 비서 <span class="standalone-tag">독립형 (서버 불필요)</span>
-          </p>
+          <p class="brand-subtitle">나만의 스마트 회의 비서</p>
         </div>
       </div>
       <div class="header-actions">
-        <button id="btn-seed" class="icon-btn" title="샘플 불러오기">
-          <i class="fa-solid fa-flask"></i>
-        </button>
-        <button id="btn-settings" class="icon-btn" title="API 설정">
+        <button id="btn-settings" class="icon-btn" title="API 및 설정">
           <i class="fa-solid fa-gear"></i>
         </button>
       </div>
@@ -479,24 +489,13 @@
         </button>
       </div>
 
-      <div class="category-tabs" id="category-tabs">
-        <button class="cat-chip active" data-cat="전체">
-          <span>전체</span> <span class="count-badge" id="count-all">0</span>
-        </button>
-        <button class="cat-chip" data-cat="스프린트/주간회의">
-          <span>🏃‍♂️ 스프린트</span> <span class="count-badge" id="count-sprint">0</span>
-        </button>
-        <button class="cat-chip" data-cat="고객/영업미팅">
-          <span>🤝 고객/영업</span> <span class="count-badge" id="count-client">0</span>
-        </button>
-        <button class="cat-chip" data-cat="기획/브레인스토밍">
-          <span>💡 기획/아이디어</span> <span class="count-badge" id="count-plan">0</span>
-        </button>
-        <button class="cat-chip" data-cat="1:1면담/피드백">
-          <span>☕ 1:1 면담</span> <span class="count-badge" id="count-oneonone">0</span>
-        </button>
-        <button class="cat-chip" data-cat="일반회의">
-          <span>📋 일반 회의</span> <span class="count-badge" id="count-general">0</span>
+      <!-- User Custom Categories -->
+      <div class="category-section-row">
+        <div class="category-tabs" id="category-tabs">
+          <!-- JS로 사용자 카테고리 칩 렌더링 -->
+        </div>
+        <button id="btn-add-cat-modal" class="btn-add-category" title="새 분류 추가">
+          <i class="fa-solid fa-plus"></i> 분류
         </button>
       </div>
     </section>
@@ -511,18 +510,15 @@
       <div id="meeting-list" class="meeting-list"></div>
 
       <div id="empty-state" class="empty-state" style="display: none;">
-        <div class="empty-icon"><i class="fa-solid fa-microphone-lines-slash"></i></div>
-        <h3>저장된 회의록이 없습니다</h3>
-        <p>하단 녹음 버튼을 눌러 회의를 기록하거나<br>우측 상단 🧪 버튼으로 샘플을 확인해보세요!</p>
-        <button id="btn-empty-sample" class="btn btn-secondary" style="margin-top: 10px;">
-          <i class="fa-solid fa-wand-magic-sparkles"></i> 실무 샘플 회의록 불러오기
-        </button>
+        <div class="empty-icon"><i class="fa-solid fa-microphone"></i></div>
+        <h3>기록된 회의가 없습니다</h3>
+        <p>아래 <strong>[새 회의 녹음]</strong> 버튼을 눌러<br>첫 회의를 녹음하고 AI 회의록을 만들어보세요!</p>
       </div>
     </main>
 
-    <!-- FAB -->
+    <!-- FAB Button -->
     <div class="fab-container">
-      <button id="btn-open-record" class="fab-record" aria-label="새 회의 녹음">
+      <button id="btn-open-record" class="fab-record" type="button" aria-label="새 회의 녹음">
         <div class="pulse-ring"></div>
         <i class="fa-solid fa-microphone"></i>
         <span>새 회의 녹음</span>
@@ -539,15 +535,26 @@
             <span class="rec-dot"></span>
             <span id="rec-status-text">준비 완료</span>
           </div>
-          <button id="btn-close-record" class="icon-btn-sm">
+          <button id="btn-close-record" class="icon-btn-sm" type="button">
             <i class="fa-solid fa-xmark"></i>
           </button>
         </div>
 
+        <!-- Custom Category Selector -->
+        <div class="form-group-custom">
+          <label><i class="fa-solid fa-folder-open"></i> 회의 분류 선택/직접입력</label>
+          <div class="cat-select-row">
+            <select id="record-category-select">
+              <!-- JS로 카테고리 옵션 채움 -->
+            </select>
+            <input type="text" id="record-category-custom" placeholder="새 분류 직접 입력" style="display:none;" />
+          </div>
+        </div>
+
         <div class="visualizer-wrapper">
           <div class="timer-display" id="record-timer">00:00:00</div>
-          <canvas id="waveform-canvas" width="340" height="90"></canvas>
-          <div class="mic-hint" id="mic-status-hint">마이크 버튼을 눌러 녹음을 시작하세요</div>
+          <canvas id="waveform-canvas" width="340" height="75"></canvas>
+          <div class="mic-hint" id="mic-status-hint">빨간색 마이크 버튼을 눌러 녹음을 시작하세요</div>
         </div>
 
         <div class="recording-bookmarks" id="recording-bookmarks-container" style="display: none;">
@@ -558,30 +565,30 @@
           <div class="bookmark-chips" id="bookmark-chips"></div>
         </div>
 
-        <div class="record-input-group">
-          <input type="text" id="record-hint" placeholder="회의 주제나 참석자 힌트 입력 (선택)..." />
+        <div class="form-group-custom">
+          <input type="text" id="record-hint" placeholder="회의 주제나 참석자 힌트 입력 (선택)..." style="width:100%; padding:10px 14px; background:var(--bg-input); border:1px solid var(--border-color); border-radius:var(--radius-md); color:#fff; font-size:13px;" />
         </div>
 
         <div class="record-controls">
-          <button id="btn-bookmark" class="btn-tool" disabled>
+          <button id="btn-bookmark" class="btn-tool" type="button" disabled>
             <i class="fa-solid fa-bookmark"></i>
             <span>중요 마킹</span>
           </button>
           
-          <button id="btn-main-record" class="btn-circle-record">
+          <button id="btn-main-record" class="btn-circle-record" type="button">
             <i class="fa-solid fa-microphone" id="main-record-icon"></i>
           </button>
 
-          <button id="btn-upload-file" class="btn-tool">
+          <button id="btn-upload-file" class="btn-tool" type="button">
             <i class="fa-solid fa-file-audio"></i>
-            <span>파일 업로드</span>
+            <span>파일 선택</span>
           </button>
           <input type="file" id="file-input-audio" accept="audio/*,.m4a,.mp3,.wav,.webm" style="display: none;">
         </div>
 
         <div class="record-footer">
-          <button id="btn-finish-analyze" class="btn btn-primary btn-full" disabled>
-            <i class="fa-solid fa-wand-magic-sparkles"></i> 녹음 완료 및 Gemini AI 분석 시작
+          <button id="btn-finish-analyze" class="btn btn-primary btn-full" type="button" disabled>
+            <i class="fa-solid fa-wand-magic-sparkles"></i> 녹음 완료 및 AI 분석 시작
           </button>
         </div>
       </div>
@@ -591,11 +598,11 @@
     <div id="ai-loading-overlay" class="modal-backdrop loading-overlay">
       <div class="loading-card">
         <div class="ai-orb"><div class="orb-inner"></div></div>
-        <h3>스마트폰에서 직접 AI 분석 중</h3>
-        <p id="loading-step" class="loading-step">Gemini 1.5 Flash가 음성을 텍스트로 변환 중...</p>
+        <h3>Gemini AI 회의 분석 중</h3>
+        <p id="loading-step" class="loading-step">음성을 텍스트로 변환하고 요약을 작성 중입니다...</p>
         <div class="progress-bar-container"><div class="progress-bar"></div></div>
         <div style="font-size: 11.5px; color: var(--text-muted);">
-          <i class="fa-regular fa-shield-halved"></i> 외부 서버 없이 Google Gemini와 폰이 직접 통신합니다.
+          <i class="fa-regular fa-shield-halved"></i> 외부 서버 없이 스마트폰에서 직접 분석합니다.
         </div>
       </div>
     </div>
@@ -603,18 +610,18 @@
     <!-- Meeting Detail Modal -->
     <div id="detail-modal" class="detail-page-modal">
       <div class="detail-top-nav">
-        <button id="btn-detail-back" class="icon-btn"><i class="fa-solid fa-arrow-left"></i></button>
+        <button id="btn-detail-back" class="icon-btn" type="button"><i class="fa-solid fa-arrow-left"></i></button>
         <div class="detail-top-title">회의록 상세</div>
         <div class="detail-nav-actions">
-          <button id="btn-copy-markdown" class="icon-btn" title="마크다운 복사"><i class="fa-solid fa-copy"></i></button>
-          <button id="btn-delete-meeting" class="icon-btn text-danger" title="삭제"><i class="fa-solid fa-trash"></i></button>
+          <button id="btn-copy-markdown" class="icon-btn" type="button" title="마크다운 복사"><i class="fa-solid fa-copy"></i></button>
+          <button id="btn-delete-meeting" class="icon-btn text-danger" type="button" title="삭제"><i class="fa-solid fa-trash"></i></button>
         </div>
       </div>
 
       <div class="detail-content">
         <div class="meeting-meta-card">
           <div class="meta-category-row">
-            <span class="detail-cat-badge" id="detail-category">스프린트</span>
+            <span class="detail-cat-badge" id="detail-category" title="탭하여 분류 변경">일반</span>
             <span class="detail-date" id="detail-date">2026-08-26 14:00</span>
           </div>
           <h2 class="detail-title" id="detail-title">회의 제목</h2>
@@ -622,9 +629,9 @@
         </div>
 
         <div class="detail-tabs">
-          <button class="detail-tab-btn active" data-tab="tab-summary"><i class="fa-solid fa-clipboard-list"></i> 요약</button>
-          <button class="detail-tab-btn" data-tab="tab-actions"><i class="fa-solid fa-list-check"></i> 할 일 <span class="tab-badge" id="detail-action-badge">0</span></button>
-          <button class="detail-tab-btn" data-tab="tab-transcript"><i class="fa-solid fa-comments"></i> 대화록</button>
+          <button class="detail-tab-btn active" data-tab="tab-summary" type="button"><i class="fa-solid fa-clipboard-list"></i> 요약</button>
+          <button class="detail-tab-btn" data-tab="tab-actions" type="button"><i class="fa-solid fa-list-check"></i> 할 일 <span class="tab-badge" id="detail-action-badge">0</span></button>
+          <button class="detail-tab-btn" data-tab="tab-transcript" type="button"><i class="fa-solid fa-comments"></i> 대화록</button>
         </div>
 
         <div id="tab-summary" class="tab-panel active">
@@ -662,24 +669,26 @@
       <div class="settings-card">
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <h3 style="font-size: 16px; font-weight: 700;"><i class="fa-solid fa-gear"></i> 환경 설정</h3>
-          <button id="btn-close-settings" class="icon-btn-sm"><i class="fa-solid fa-xmark"></i></button>
+          <button id="btn-close-settings" class="icon-btn-sm" type="button"><i class="fa-solid fa-xmark"></i></button>
         </div>
 
         <div class="form-group">
           <label for="api-key-input">Google Gemini API Key</label>
           <div class="input-with-icon">
-            <input type="password" id="api-key-input" placeholder="AQ.Ab8RN..." />
+            <input type="password" id="api-key-input" placeholder="발급받으신 Gemini API 키 입력" />
             <button id="btn-toggle-key-visibility" class="icon-btn-sm" type="button"><i class="fa-regular fa-eye"></i></button>
           </div>
-          <p class="form-help">키는 사용자 기기의 로컬 저장소(LocalStorage)에만 안전하게 보관됩니다.</p>
+          <p class="form-help">키는 사용자 기기의 로컬 저장소에만 안전하게 보관됩니다.</p>
         </div>
 
-        <div class="info-card">
-          <strong style="color: var(--primary);">✨ 서버 없이 영구 작동</strong><br>
-          PC나 외부 서버 없이 스마트폰이 직접 Gemini와 통신하므로, 어디서든 폰만 있으면 24시간 정상 작동합니다.
+        <div class="form-group">
+          <label>내가 만든 회의 분류 관리</label>
+          <div id="custom-cat-manager-list" style="display:flex; flex-direction:column; gap:6px; max-height:140px; overflow-y:auto; padding:4px 0;">
+            <!-- JS로 카테고리 삭제 버튼 목록 렌더링 -->
+          </div>
         </div>
 
-        <button id="btn-save-key" class="btn btn-primary btn-full"><i class="fa-solid fa-check"></i> 설정 저장</button>
+        <button id="btn-save-key" class="btn btn-primary btn-full" type="button"><i class="fa-solid fa-check"></i> 설정 저장</button>
       </div>
     </div>
 
@@ -690,17 +699,20 @@
     // ==========================================
     // Standalone Storage & State
     // ==========================================
-    // GitHub 공개 저장소 보안을 위해 API 키는 사용자의 로컬 브라우저(LocalStorage)에만 안전하게 보관됩니다.
+    const DEFAULT_CATEGORIES = ["일반", "팀회의", "프로젝트", "아이디어"];
+
     const state = {
       apiKey: localStorage.getItem("MEETAI_API_KEY") || "",
       meetings: JSON.parse(localStorage.getItem("MEETAI_MEETINGS") || "[]"),
+      categories: JSON.parse(localStorage.getItem("MEETAI_CATEGORIES") || JSON.stringify(DEFAULT_CATEGORIES)),
       currentFilter: "전체",
       searchQuery: "",
       selectedMeeting: null,
       
-      // Recording
+      // Recording State
       isRecording: false,
       mediaRecorder: null,
+      audioStream: null,
       audioChunks: [],
       recordedBlob: null,
       recordStartTime: null,
@@ -713,25 +725,14 @@
       animationId: null
     };
 
-    // Save initial key if not present
-    if (!localStorage.getItem("MEETAI_API_KEY")) {
-      localStorage.setItem("MEETAI_API_KEY", DEFAULT_API_KEY);
-    }
-
-    // Default Sample Data if first time
-    if (state.meetings.length === 0) {
-      seedDefaultSamples();
-    }
-
-    // ==========================================
     // DOM Elements
-    // ==========================================
     const el = {
       meetingList: document.getElementById('meeting-list'),
       emptyState: document.getElementById('empty-state'),
       searchInput: document.getElementById('search-input'),
       searchClear: document.getElementById('search-clear'),
       categoryTabs: document.getElementById('category-tabs'),
+      btnAddCatModal: document.getElementById('btn-add-cat-modal'),
       totalCountText: document.getElementById('total-count-text'),
       currentFilterTitle: document.getElementById('current-filter-title'),
       
@@ -756,6 +757,8 @@
       micStatusHint: document.getElementById('mic-status-hint'),
       waveformCanvas: document.getElementById('waveform-canvas'),
       recordHint: document.getElementById('record-hint'),
+      recordCatSelect: document.getElementById('record-category-select'),
+      recordCatCustom: document.getElementById('record-category-custom'),
       bookmarkContainer: document.getElementById('recording-bookmarks-container'),
       bookmarkChips: document.getElementById('bookmark-chips'),
       bookmarkCount: document.getElementById('bookmark-count'),
@@ -774,13 +777,12 @@
       actionProgressText: document.getElementById('action-progress-text'),
       detailTranscriptChat: document.getElementById('detail-transcript-chat'),
       
-      btnSeed: document.getElementById('btn-seed'),
-      btnEmptySample: document.getElementById('btn-empty-sample'),
       btnSettings: document.getElementById('btn-settings'),
       btnCloseSettings: document.getElementById('btn-close-settings'),
       btnSaveKey: document.getElementById('btn-save-key'),
       apiKeyInput: document.getElementById('api-key-input'),
-      btnToggleKeyVisibility: document.getElementById('btn-toggle-key-visibility')
+      btnToggleKeyVisibility: document.getElementById('btn-toggle-key-visibility'),
+      customCatManagerList: document.getElementById('custom-cat-manager-list')
     };
 
     // ==========================================
@@ -788,24 +790,38 @@
     // ==========================================
     document.addEventListener('DOMContentLoaded', () => {
       initListeners();
+      renderCategoryTabs();
       renderMeetings();
-      updateCategoryCounts();
       drawEmptyWaveform();
       el.apiKeyInput.value = state.apiKey;
     });
 
     function initListeners() {
-      // Category filter
-      el.categoryTabs.addEventListener('click', (e) => {
-        const chip = e.target.closest('.cat-chip');
-        if (!chip) return;
-        document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
-        chip.classList.add('active');
-        state.currentFilter = chip.dataset.cat;
-        renderMeetings();
+      // 1. 새 회의 녹음 버튼 열기 (Click & Touch)
+      const handleOpenRecord = (e) => {
+        if (e) e.preventDefault();
+        openRecordModal();
+      };
+      el.btnOpenRecord.addEventListener('click', handleOpenRecord);
+      el.btnOpenRecord.addEventListener('touchend', handleOpenRecord);
+
+      el.btnCloseRecord.addEventListener('click', closeRecordModal);
+
+      // 2. 카테고리 추가 버튼
+      el.btnAddCatModal.addEventListener('click', () => {
+        const newCat = prompt('새로 추가할 회의 분류 이름을 입력하세요:');
+        if (newCat && newCat.trim()) {
+          const trimmed = newCat.trim();
+          if (!state.categories.includes(trimmed)) {
+            state.categories.push(trimmed);
+            localStorage.setItem('MEETAI_CATEGORIES', JSON.stringify(state.categories));
+            renderCategoryTabs();
+            showToast(`📁 '${trimmed}' 분류가 추가되었습니다.`);
+          }
+        }
       });
 
-      // Search
+      // 3. Search
       el.searchInput.addEventListener('input', (e) => {
         state.searchQuery = e.target.value.trim().toLowerCase();
         el.searchClear.style.display = state.searchQuery ? 'block' : 'none';
@@ -818,26 +834,34 @@
         renderMeetings();
       });
 
-      // Modals
-      el.btnOpenRecord.addEventListener('click', openRecordModal);
-      el.btnCloseRecord.addEventListener('click', closeRecordModal);
-      el.btnSettings.addEventListener('click', () => {
-        el.apiKeyInput.value = state.apiKey;
-        el.settingsModal.classList.add('active');
-      });
+      // 4. Settings
+      el.btnSettings.addEventListener('click', openSettingsModal);
       el.btnCloseSettings.addEventListener('click', () => el.settingsModal.classList.remove('active'));
 
-      // Recording
+      // 5. Recording Controls
       el.btnMainRecord.addEventListener('click', toggleRecording);
       el.btnBookmark.addEventListener('click', addBookmark);
       el.btnUploadFile.addEventListener('click', () => el.fileInputAudio.click());
       el.fileInputAudio.addEventListener('change', handleFileUpload);
       el.btnFinishAnalyze.addEventListener('click', submitRecordingForAnalysis);
 
-      // Detail
+      // 녹음 모달 내 카테고리 셀렉트 변경 시
+      el.recordCatSelect.addEventListener('change', () => {
+        if (el.recordCatSelect.value === '__custom__') {
+          el.recordCatCustom.style.display = 'block';
+          el.recordCatCustom.focus();
+        } else {
+          el.recordCatCustom.style.display = 'none';
+        }
+      });
+
+      // 6. Detail View
       el.btnDetailBack.addEventListener('click', () => el.detailModal.classList.remove('active'));
       el.btnCopyMarkdown.addEventListener('click', copyMeetingAsMarkdown);
       el.btnDeleteMeeting.addEventListener('click', deleteCurrentMeeting);
+
+      // 상세창에서 카테고리 뱃지 클릭 시 카테고리 변경 기능
+      el.detailCategory.addEventListener('click', changeCurrentMeetingCategory);
 
       // Tabs
       document.querySelectorAll('.detail-tab-btn').forEach(btn => {
@@ -853,27 +877,85 @@
       // Settings Save
       el.btnSaveKey.addEventListener('click', () => {
         const key = el.apiKeyInput.value.trim();
-        if (!key) return alert('API 키를 입력해주세요.');
         state.apiKey = key;
         localStorage.setItem('MEETAI_API_KEY', key);
         el.settingsModal.classList.remove('active');
-        showToast('🔑 API 키가 저장되었습니다.');
+        showToast('🔑 설정이 저장되었습니다.');
       });
 
       el.btnToggleKeyVisibility.addEventListener('click', () => {
         el.apiKeyInput.type = el.apiKeyInput.type === 'password' ? 'text' : 'password';
       });
+    }
 
-      // Seed
-      el.btnSeed.addEventListener('click', () => {
-        seedDefaultSamples();
-        showToast('🧪 샘플 회의록 3건이 복구되었습니다.');
+    // ==========================================
+    // Category Tabs Management
+    // ==========================================
+    function renderCategoryTabs() {
+      let html = `<button class="cat-chip ${state.currentFilter === '전체' ? 'active' : ''}" data-cat="전체"><span>전체</span></button>`;
+      
+      state.categories.forEach(cat => {
+        html += `<button class="cat-chip ${state.currentFilter === cat ? 'active' : ''}" data-cat="${escapeHtml(cat)}"><span>${escapeHtml(cat)}</span></button>`;
       });
-      if (el.btnEmptySample) {
-        el.btnEmptySample.addEventListener('click', () => {
-          seedDefaultSamples();
-          showToast('🧪 샘플 회의록이 생성되었습니다.');
+
+      el.categoryTabs.innerHTML = html;
+
+      // Tab click events
+      el.categoryTabs.querySelectorAll('.cat-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+          el.categoryTabs.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          state.currentFilter = chip.dataset.cat;
+          renderMeetings();
         });
+      });
+
+      // Update Select in Record Modal
+      let selectHtml = '';
+      state.categories.forEach(cat => {
+        selectHtml += `<option value="${escapeHtml(cat)}">${escapeHtml(cat)}</option>`;
+      });
+      selectHtml += `<option value="__custom__">+ 새 분류 직접 입력...</option>`;
+      el.recordCatSelect.innerHTML = selectHtml;
+    }
+
+    function openSettingsModal() {
+      el.apiKeyInput.value = state.apiKey;
+      
+      // Render Category Manager list in settings
+      el.customCatManagerList.innerHTML = state.categories.map((cat, idx) => `
+        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.03); padding:6px 10px; border-radius:6px; font-size:12.5px;">
+          <span>📁 ${escapeHtml(cat)}</span>
+          ${state.categories.length > 1 ? `<button onclick="deleteCategory(${idx})" style="background:none; border:none; color:var(--accent-rose); cursor:pointer;"><i class="fa-solid fa-trash"></i></button>` : ''}
+        </div>
+      `).join('');
+
+      el.settingsModal.classList.add('active');
+    }
+
+    window.deleteCategory = function(idx) {
+      if (confirm(`'${state.categories[idx]}' 분류를 삭제하시겠습니까?`)) {
+        state.categories.splice(idx, 1);
+        localStorage.setItem('MEETAI_CATEGORIES', JSON.stringify(state.categories));
+        renderCategoryTabs();
+        openSettingsModal();
+      }
+    };
+
+    function changeCurrentMeetingCategory() {
+      if (!state.selectedMeeting) return;
+      const newCat = prompt(`회의 분류를 변경하세요 (현재: ${state.selectedMeeting.category}):`, state.selectedMeeting.category);
+      if (newCat && newCat.trim()) {
+        const trimmed = newCat.trim();
+        state.selectedMeeting.category = trimmed;
+        if (!state.categories.includes(trimmed)) {
+          state.categories.push(trimmed);
+          localStorage.setItem('MEETAI_CATEGORIES', JSON.stringify(state.categories));
+          renderCategoryTabs();
+        }
+        saveMeetingsToStorage();
+        el.detailCategory.textContent = trimmed;
+        showToast(`분류가 '${trimmed}'(으)로 변경되었습니다.`);
       }
     }
 
@@ -910,7 +992,6 @@
 
       el.emptyState.style.display = 'none';
       el.meetingList.innerHTML = filtered.map(m => {
-        const catClass = getCategoryClass(m.category);
         const firstSummary = (m.summary_3lines && m.summary_3lines[0]) ? m.summary_3lines[0] : '요약 내용 없음';
         const actions = m.action_items || [];
         const doneCount = actions.filter(a => a.done).length;
@@ -920,7 +1001,7 @@
         return `
           <div class="meeting-card" onclick="openMeetingDetail('${m.id}')">
             <div class="card-top-row">
-              <span class="card-category-badge ${catClass}">${escapeHtml(m.category || '일반회의')}</span>
+              <span class="card-category-badge">${escapeHtml(m.category || '일반')}</span>
               <span class="card-meta-time"><i class="fa-regular fa-clock"></i> ${formatDate(m.meeting_date)}</span>
             </div>
             <h3 class="card-title">${escapeHtml(m.title)}</h3>
@@ -938,142 +1019,21 @@
       }).join('');
     }
 
-    function updateCategoryCounts() {
-      const counts = { all: state.meetings.length, sprint: 0, client: 0, plan: 0, oneonone: 0, general: 0 };
-      state.meetings.forEach(m => {
-        if (m.category === '스프린트/주간회의') counts.sprint++;
-        else if (m.category === '고객/영업미팅') counts.client++;
-        else if (m.category === '기획/브레인스토밍') counts.plan++;
-        else if (m.category === '1:1면담/피드백') counts.oneonone++;
-        else counts.general++;
-      });
-      document.getElementById('count-all').textContent = counts.all;
-      document.getElementById('count-sprint').textContent = counts.sprint;
-      document.getElementById('count-client').textContent = counts.client;
-      document.getElementById('count-plan').textContent = counts.plan;
-      document.getElementById('count-oneonone').textContent = counts.oneonone;
-      document.getElementById('count-general').textContent = counts.general;
-    }
-
     function saveMeetingsToStorage() {
       localStorage.setItem('MEETAI_MEETINGS', JSON.stringify(state.meetings));
       renderMeetings();
-      updateCategoryCounts();
     }
 
     // ==========================================
-    // Gemini API Direct Client-Side Call
-    // ==========================================
-    const SYSTEM_PROMPT = `
-당신은 대한민국 최고의 AI 전문 회의 비서입니다.
-제공된 회의 오디오(또는 텍스트)를 면밀히 분석하여 업무 효율을 극대화할 수 있는 완벽한 회의록을 작성해야 합니다.
-반드시 오직 유효한 JSON 형식으로만 응답하세요. (마크다운 \`\`\`json ... \`\`\` 로 감싸도 됨)
-
-[JSON 스키마]
-{
-  "title": "회의 핵심 주제를 반영한 전문적인 제목",
-  "category": "스프린트/주간회의 | 고객/영업미팅 | 기획/브레인스토밍 | 1:1면담/피드백 | 일반회의 중 택1",
-  "tags": ["#태그1", "#태그2", "#태그3"],
-  "summary_3lines": ["1. 핵심 요약1", "2. 핵심 요약2", "3. 핵심 요약3"],
-  "key_decisions": ["결정 사항 1", "결정 사항 2"],
-  "action_items": [
-    { "task": "할 일 내용", "assignee": "담당자", "due_date": "기한", "done": false }
-  ],
-  "transcript": [
-    { "speaker": "참석자 A", "time": "00:05", "text": "발화 내용" }
-  ]
-}
-`;
-
-    async function callGeminiDirectly(audioBlob, userHint = "") {
-      const apiKey = state.apiKey || localStorage.getItem("MEETAI_API_KEY");
-      if (!apiKey) {
-        el.settingsModal.classList.add('active');
-        throw new Error("Google Gemini API 키가 필요합니다. 설정 창에 키를 입력하고 [설정 저장]을 눌러주세요.");
-      }
-
-      // Convert Audio Blob to Base64
-      const base64Data = await blobToBase64(audioBlob);
-      const mimeType = audioBlob.type || "audio/webm";
-
-      const promptText = `이 회의 오디오를 듣고 화자 분리, 대화 스크립트, 3줄 핵심 요약, 주요 결정 사항, 카테고리 분류, 액션 아이템을 JSON 형식으로 작성해주세요.\n${userHint ? `[사용자 힌트]: ${userHint}` : ''}`;
-
-      // Gemini 1.5 Flash REST API Endpoint
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-
-      const payload = {
-        contents: [
-          {
-            parts: [
-              {
-                inline_data: {
-                  mime_type: mimeType.split(';')[0],
-                  data: base64Data
-                }
-              },
-              {
-                text: promptText
-              }
-            ]
-          }
-        ],
-        systemInstruction: {
-          parts: [{ text: SYSTEM_PROMPT }]
-        }
-      };
-
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
-
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error?.message || `API 요청 실패 (${res.status})`);
-      }
-
-      const data = await res.json();
-      const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
-      return parseJsonResponse(responseText);
-    }
-
-    function parseJsonResponse(raw) {
-      let clean = raw.trim();
-      const match = clean.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
-      if (match) clean = match[1].trim();
-
-      try {
-        return JSON.parse(clean);
-      } catch (e) {
-        const first = clean.indexOf('{');
-        const last = clean.lastIndexOf('}');
-        if (first !== -1 && last !== -1) {
-          return JSON.parse(clean.slice(first, last + 1));
-        }
-        throw new Error("AI 응답을 JSON으로 변환할 수 없습니다: " + e.message);
-      }
-    }
-
-    function blobToBase64(blob) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          const base64String = reader.result.split(',')[1];
-          resolve(base64String);
-        };
-        reader.onerror = reject;
-        reader.readAsDataURL(blob);
-      });
-    }
-
-    // ==========================================
-    // Recording & Visualizer
+    // Recording & Audio
     // ==========================================
     function openRecordModal() {
       resetRecordingState();
+      renderCategoryTabs();
+      el.recordCatCustom.style.display = 'none';
       el.recordModal.classList.add('active');
     }
+
     function closeRecordModal() {
       if (state.isRecording) {
         if (!confirm('녹음 중입니다. 닫으시겠습니까?')) return;
@@ -1082,6 +1042,7 @@
       el.recordModal.classList.remove('active');
       resetRecordingState();
     }
+
     function resetRecordingState() {
       state.isRecording = false;
       state.audioChunks = [];
@@ -1089,14 +1050,20 @@
       state.recordSeconds = 0;
       state.bookmarks = [];
       clearInterval(state.recordTimerInterval);
+      
+      if (state.audioStream) {
+        state.audioStream.getTracks().forEach(t => t.stop());
+        state.audioStream = null;
+      }
       if (state.animationId) cancelAnimationFrame(state.animationId);
       if (state.audioContext && state.audioContext.state !== 'closed') {
         try { state.audioContext.close(); } catch(e){}
       }
+      
       el.recordTimer.textContent = '00:00:00';
       el.recStatusText.textContent = '준비 완료';
       el.recDot.classList.remove('recording');
-      el.micStatusHint.textContent = '마이크 버튼을 눌러 녹음을 시작하세요';
+      el.micStatusHint.textContent = '빨간색 마이크 버튼을 눌러 녹음을 시작하세요';
       el.btnMainRecord.classList.remove('recording');
       el.mainRecordIcon.className = 'fa-solid fa-microphone';
       el.btnBookmark.disabled = true;
@@ -1108,35 +1075,55 @@
     }
 
     async function toggleRecording() {
-      if (!state.isRecording) await startRecording();
-      else stopRecording();
+      if (!state.isRecording) {
+        await startRecording();
+      } else {
+        stopRecording();
+      }
     }
 
     async function startRecording() {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        setupVisualizer(stream);
+        el.micStatusHint.textContent = '마이크 연결 중...';
+        
+        // Audio stream
+        state.audioStream = await navigator.mediaDevices.getUserMedia({
+          audio: {
+            echoCancellation: true,
+            noiseSuppression: true,
+            autoGainControl: true
+          }
+        });
 
-        let mimeType = 'audio/webm';
-        if (!MediaRecorder.isTypeSupported('audio/webm')) {
-          if (MediaRecorder.isTypeSupported('audio/mp4')) mimeType = 'audio/mp4';
-          else mimeType = '';
+        // Setup Visualizer
+        setupVisualizer(state.audioStream);
+
+        // MimeType detection for best mobile support
+        let options = {};
+        if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
+          options.mimeType = 'audio/webm;codecs=opus';
+        } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
+          options.mimeType = 'audio/mp4';
+        } else if (MediaRecorder.isTypeSupported('audio/webm')) {
+          options.mimeType = 'audio/webm';
         }
 
-        state.mediaRecorder = mimeType ? new MediaRecorder(stream, { mimeType }) : new MediaRecorder(stream);
+        state.mediaRecorder = new MediaRecorder(state.audioStream, options);
         state.audioChunks = [];
 
         state.mediaRecorder.ondataavailable = (e) => {
-          if (e.data.size > 0) state.audioChunks.push(e.data);
+          if (e.data && e.data.size > 0) state.audioChunks.push(e.data);
         };
 
         state.mediaRecorder.onstop = () => {
           const type = state.mediaRecorder.mimeType || 'audio/webm';
           state.recordedBlob = new Blob(state.audioChunks, { type });
-          stream.getTracks().forEach(t => t.stop());
+          if (state.audioStream) {
+            state.audioStream.getTracks().forEach(t => t.stop());
+          }
           el.btnFinishAnalyze.disabled = false;
           el.recStatusText.textContent = '녹음 완료';
-          el.micStatusHint.textContent = '녹음 완료! [Gemini AI 분석 시작]을 누르세요.';
+          el.micStatusHint.textContent = '녹음 완료! 하단의 [AI 분석 시작] 버튼을 누르세요.';
         };
 
         state.mediaRecorder.start(1000);
@@ -1147,7 +1134,7 @@
         el.mainRecordIcon.className = 'fa-solid fa-stop';
         el.recDot.classList.add('recording');
         el.recStatusText.textContent = '실시간 녹음 중...';
-        el.micStatusHint.textContent = '회의 음성을 녹음 중입니다. 중요 시 [중요 마킹] 탭';
+        el.micStatusHint.textContent = '회의 음성을 녹음 중입니다. 중요 발언 시 [중요 마킹] 탭';
         el.btnBookmark.disabled = false;
         el.btnFinishAnalyze.disabled = true;
 
@@ -1157,7 +1144,9 @@
         }, 1000);
 
       } catch (err) {
-        alert('마이크 접근 권한이 필요합니다. 브라우저 설정에서 허용해주세요.');
+        console.error('마이크 에러:', err);
+        alert('마이크 접근 권한이 필요합니다. 브라우저 주소창 왼쪽의 자물쇠/설정 아이콘을 눌러 마이크 권한을 허용해주세요.');
+        el.micStatusHint.textContent = '마이크 권한 허용이 필요합니다.';
       }
     }
 
@@ -1174,14 +1163,21 @@
     }
 
     function setupVisualizer(stream) {
-      const AudioCtx = window.AudioContext || window.webkitAudioContext;
-      state.audioContext = new AudioCtx();
-      const src = state.audioContext.createMediaStreamSource(stream);
-      state.analyser = state.audioContext.createAnalyser();
-      state.analyser.fftSize = 64;
-      src.connect(state.analyser);
-      state.dataArray = new Uint8Array(state.analyser.frequencyBinCount);
-      drawWaveform();
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        state.audioContext = new AudioCtx();
+        if (state.audioContext.state === 'suspended') {
+          state.audioContext.resume();
+        }
+        const src = state.audioContext.createMediaStreamSource(stream);
+        state.analyser = state.audioContext.createAnalyser();
+        state.analyser.fftSize = 64;
+        src.connect(state.analyser);
+        state.dataArray = new Uint8Array(state.analyser.frequencyBinCount);
+        drawWaveform();
+      } catch (e) {
+        console.warn('Visualizer setup error:', e);
+      }
     }
 
     function drawWaveform() {
@@ -1262,18 +1258,132 @@
     }
 
     // ==========================================
+    // Gemini API Direct Analysis
+    // ==========================================
+    const SYSTEM_PROMPT = `
+당신은 최고의 AI 전문 회의 비서입니다.
+제공된 회의 오디오를 분석하여 완벽한 회의록을 작성해야 합니다.
+반드시 오직 유효한 JSON 형식으로만 응답하세요. (마크다운 \`\`\`json ... \`\`\` 로 감싸도 됨)
+
+[JSON 스키마]
+{
+  "title": "회의 핵심 주제를 반영한 전문적인 제목",
+  "tags": ["#태그1", "#태그2", "#태그3"],
+  "summary_3lines": ["1. 핵심 요약1", "2. 핵심 요약2", "3. 핵심 요약3"],
+  "key_decisions": ["결정 사항 1", "결정 사항 2"],
+  "action_items": [
+    { "task": "할 일 내용", "assignee": "담당자", "due_date": "기한", "done": false }
+  ],
+  "transcript": [
+    { "speaker": "참석자 A", "time": "00:05", "text": "발화 내용" }
+  ]
+}
+`;
+
+    async function callGeminiDirectly(audioBlob, userHint = "") {
+      const apiKey = state.apiKey || localStorage.getItem("MEETAI_API_KEY");
+      if (!apiKey) {
+        el.settingsModal.classList.add('active');
+        throw new Error("Google Gemini API 키가 필요합니다. 설정 창에 키를 입력하고 [설정 저장]을 눌러주세요.");
+      }
+
+      const base64Data = await blobToBase64(audioBlob);
+      const mimeType = audioBlob.type || "audio/webm";
+
+      const promptText = `이 회의 오디오를 듣고 화자 분리, 대화 스크립트, 3줄 핵심 요약, 주요 결정 사항, 액션 아이템을 JSON 형식으로 작성해주세요.\n${userHint ? `[사용자 힌트]: ${userHint}` : ''}`;
+
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+
+      const payload = {
+        contents: [
+          {
+            parts: [
+              {
+                inline_data: {
+                  mime_type: mimeType.split(';')[0],
+                  data: base64Data
+                }
+              },
+              {
+                text: promptText
+              }
+            ]
+          }
+        ],
+        systemInstruction: {
+          parts: [{ text: SYSTEM_PROMPT }]
+        }
+      };
+
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error?.message || `API 요청 실패 (${res.status})`);
+      }
+
+      const data = await res.json();
+      const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+      return parseJsonResponse(responseText);
+    }
+
+    function parseJsonResponse(raw) {
+      let clean = raw.trim();
+      const match = clean.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
+      if (match) clean = match[1].trim();
+
+      try {
+        return JSON.parse(clean);
+      } catch (e) {
+        const first = clean.indexOf('{');
+        const last = clean.lastIndexOf('}');
+        if (first !== -1 && last !== -1) {
+          return JSON.parse(clean.slice(first, last + 1));
+        }
+        throw new Error("AI 응답을 JSON으로 변환할 수 없습니다: " + e.message);
+      }
+    }
+
+    function blobToBase64(blob) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const base64String = reader.result.split(',')[1];
+          resolve(base64String);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+    }
+
+    // ==========================================
     // Submit for Analysis
     // ==========================================
     async function submitRecordingForAnalysis() {
       if (!state.recordedBlob) return alert('녹음 데이터가 없습니다.');
 
+      // 카테고리 결정 (사용자 선택 또는 직접 입력)
+      let selectedCategory = el.recordCatSelect.value;
+      if (selectedCategory === '__custom__') {
+        selectedCategory = el.recordCatCustom.value.trim() || '일반';
+      }
+      if (!state.categories.includes(selectedCategory)) {
+        state.categories.push(selectedCategory);
+        localStorage.setItem('MEETAI_CATEGORIES', JSON.stringify(state.categories));
+        renderCategoryTabs();
+      }
+
       el.loadingOverlay.classList.add('active');
       const steps = [
-        '스마트폰에서 오디오 Base64 인코딩 중...',
-        'Google Gemini 1.5 Flash에 직접 전송 중...',
-        'AI 화자 분리 및 실시간 스크립트 작성 중...',
-        '회의 카테고리 분류 및 핵심 요약 추출 중...',
-        '주요 결정 사항 및 Action Items 구조화 중...'
+        '오디오 데이터를 변환하고 있습니다...',
+        'Gemini 1.5 Flash AI가 음성을 분석 중입니다...',
+        '화자 분리 및 대화 스크립트를 작성 중입니다...',
+        '3줄 핵심 요약 및 주요 결정 사항을 정리 중입니다...',
+        '실행 과제(Action Items)를 구조화하고 있습니다...'
       ];
 
       let stepIdx = 0;
@@ -1291,7 +1401,7 @@
         const newMeeting = {
           id: 'meet_' + Date.now(),
           title: analysis.title || '새로운 회의록',
-          category: analysis.category || '일반회의',
+          category: selectedCategory,
           meeting_date: new Date().toISOString().replace('T', ' ').slice(0, 16),
           duration_seconds: state.recordSeconds,
           summary_3lines: analysis.summary_3lines || [],
@@ -1302,14 +1412,13 @@
           bookmarks: state.bookmarks
         };
 
-        // Add to state and save
         state.meetings.unshift(newMeeting);
         saveMeetingsToStorage();
 
         closeRecordModal();
         el.loadingOverlay.classList.remove('active');
         openMeetingDetail(newMeeting.id);
-        showToast('✨ AI 회의록 분석이 완료되었습니다!');
+        showToast('✨ 회의록 생성이 완료되었습니다!');
 
       } catch (err) {
         clearInterval(stepInt);
@@ -1327,8 +1436,7 @@
       state.selectedMeeting = meeting;
 
       el.detailTitle.textContent = meeting.title;
-      el.detailCategory.textContent = meeting.category || '일반회의';
-      el.detailCategory.className = `detail-cat-badge ${getCategoryClass(meeting.category)}`;
+      el.detailCategory.textContent = meeting.category || '일반';
       el.detailDate.textContent = `${meeting.meeting_date} (${formatDuration(meeting.duration_seconds)})`;
 
       el.detailTags.innerHTML = (meeting.tags || []).map(t => `<span class="tag-item">${escapeHtml(t)}</span>`).join('');
@@ -1353,7 +1461,6 @@
         </div>
       `).join('') || '<p class="text-muted">대화록 없음</p>';
 
-      // Reset Tab
       document.querySelectorAll('.detail-tab-btn').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
       document.querySelector('.detail-tab-btn[data-tab="tab-summary"]').classList.add('active');
@@ -1401,7 +1508,7 @@
     function copyMeetingAsMarkdown() {
       const m = state.selectedMeeting;
       if (!m) return;
-      let md = `# [회의록] ${m.title}\n\n- **일시**: ${m.meeting_date}\n- **카테고리**: ${m.category}\n- **태그**: ${(m.tags || []).join(' ')}\n\n`;
+      let md = `# [회의록] ${m.title}\n\n- **일시**: ${m.meeting_date}\n- **분류**: ${m.category}\n- **태그**: ${(m.tags || []).join(' ')}\n\n`;
       md += `## 📋 3줄 핵심 요약\n` + (m.summary_3lines || []).map(s => `- ${s}`).join('\n') + `\n\n`;
       md += `## 🎯 주요 결정 사항\n` + (m.key_decisions || []).map(d => `- ${d}`).join('\n') + `\n\n`;
       md += `## ✅ Action Items\n` + (m.action_items || []).map(a => `- [${a.done ? 'x' : ' '}] **${a.task}** (${a.assignee} / ${a.due_date})`).join('\n') + `\n\n`;
@@ -1423,97 +1530,6 @@
     }
 
     // ==========================================
-    // Seed Sample Data
-    // ==========================================
-    function seedDefaultSamples() {
-      state.meetings = [
-        {
-          id: "sample-1",
-          title: "2026 Q3 모바일 결제 개편 및 PG사 연동 스프린트",
-          category: "스프린트/주간회의",
-          meeting_date: "2026-08-26 14:00",
-          duration_seconds: 1845,
-          summary_3lines: [
-            "1. 모바일 간편결제(Apple Pay/Google Pay) 및 PG사 연동 진행 현황 점검 완료",
-            "2. QA 단계에서 발견된 간헐적 타임아웃 예외처리 및 서킷브레이커 적용 결정",
-            "3. 8월 29일(금)까지 스테이징 최종 검증 후 다음 주 화요일 정식 배포 합의"
-          ],
-          key_decisions: [
-            "PG사 타임아웃 재시도 정책을 최대 3회로 확대하고 지수 백오프 적용",
-            "결제 실패 시 사용자에게 친절한 에러 팝업 및 대체 결제수단 즉시 유도",
-            "배포 예정일: 2026년 9월 1일(화) 새벽 2시 점검 시간"
-          ],
-          action_items: [
-            { task: "PG사 타임아웃 재시도 및 로깅 모듈 보완", assignee: "김개발", due_date: "8월 28일", done: true },
-            { task: "결제 실패 엣지케이스 테스트 시나리오 작성 및 QA", assignee: "이QA", due_date: "8월 29일", done: false },
-            { task: "CS팀 결제 오류 대응 매뉴얼 배포", assignee: "박운영", due_date: "8월 31일", done: false }
-          ],
-          transcript: [
-            { speaker: "김팀장", time: "00:02", text: "네, 다들 모이셨으니 이번 주 결제 모듈 스프린트 점검 시작하겠습니다. 김개발님 먼저 현황 공유 부탁드립니다." },
-            { speaker: "김개발", time: "00:15", text: "현재 간편결제 기본 연동은 완료되었고, 부하 테스트 중 PG사 응답 지연 시 타임아웃 처리가 미흡한 부분이 발견되었습니다." },
-            { speaker: "이QA", time: "00:35", text: "네, 네트워크 불안정 상황에서 실패 화면으로 바로 빠지는 이슈가 있어서 재시도 처리가 꼭 필요합니다." },
-            { speaker: "김팀장", time: "00:50", text: "좋습니다. 재시도 3회 적용하고 29일까지 스테이징 QA 마치고 9월 1일 배포로 확정하죠." }
-          ],
-          tags: ["#모바일결제", "#스프린트", "#QA", "#PG연동"],
-          bookmarks: [{ time: "00:50", note: "배포 일정 최종 확정" }]
-        },
-        {
-          id: "sample-2",
-          title: "A사 B2B 솔루션 도입 협의 및 커스터마이징 요구사항 미팅",
-          category: "고객/영업미팅",
-          meeting_date: "2026-08-25 16:30",
-          duration_seconds: 2420,
-          summary_3lines: [
-            "1. A사 보안 정책에 따른 온프레미스 연동 및 SSO(Single Sign-On) 지원 요건 확인",
-            "2. 연간 라이선스 견적 및 1차 파일럿 테스트(100명 규모) 진행 조건 협의",
-            "3. 다음 주 월요일까지 기술 지원 상세 범위가 포함된 제안서 수정본 전달 예정"
-          ],
-          key_decisions: [
-            "A사 전용 Azure AD 기반 SSO 연동 모듈을 기본 패키지에 포함하기로 합의",
-            "파일럿 기간은 4주로 설정하고 전담 엔지니어 1명 배정"
-          ],
-          action_items: [
-            { task: "SSO 연동 규격서 및 수정 제안서 발송", assignee: "최영업", due_date: "8월 31일", done: false },
-            { task: "A사 보안 감사 체크리스트 검토 및 서명", assignee: "정보안", due_date: "9월 2일", done: false }
-          ],
-          transcript: [
-            { speaker: "A사 담당자", time: "00:05", text: "저희는 사내 보안 규정상 SSO 연동과 데이터 암호화 보관이 필수 조건입니다." },
-            { speaker: "최영업", time: "00:20", text: "네, 고객사 환경에 맞춘 Azure AD SSO 연동은 기존 레퍼런스가 충분하여 바로 지원 가능합니다." }
-          ],
-          tags: ["#B2B영업", "#SSO", "#고객사미팅", "#A사"],
-          bookmarks: [{ time: "00:20", note: "SSO 기본 패키지 포함 확정" }]
-        },
-        {
-          id: "sample-3",
-          title: "2026 하반기 신규 AI 비서 기능 기획 브레인스토밍",
-          category: "기획/브레인스토밍",
-          meeting_date: "2026-08-24 11:00",
-          duration_seconds: 3100,
-          summary_3lines: [
-            "1. 회의 중 실시간 마킹 기능 및 캘린더 연동 자동 녹음 아이디어 도출",
-            "2. 노션/슬랙 원클릭 내보내기와 음성 검색(Voice Query) 기능 우선순위 상향",
-            "3. 9월 1차 프로토타입 디자인 시안 완성 목표"
-          ],
-          key_decisions: [
-            "위젯을 통한 홈 화면 1초 녹음 시작 기능을 P0 우선순위로 선정",
-            "회의록 완료 시 슬랙 채널 자동 알림 봇 연동 추가"
-          ],
-          action_items: [
-            { task: "모바일 위젯 및 녹음 UX 와이어프레임 제작", assignee: "한디자이너", due_date: "9월 3일", done: true },
-            { task: "Slack Webhook 연동 API 프로토타입 작성", assignee: "송백엔드", due_date: "9월 5일", done: false }
-          ],
-          transcript: [
-            { speaker: "박기획", time: "00:10", text: "회의가 끝났을 때 노션이나 슬랙으로 바로 보내주는 기능이 사용자 반응이 가장 좋을 것 같아요." },
-            { speaker: "한디자이너", time: "00:25", text: "동의합니다. 위젯에서 바로 녹음 누르는 동선도 디자인해보겠습니다." }
-          ],
-          tags: ["#신규기획", "#브레인스토밍", "#UX개선", "#슬랙연동"],
-          bookmarks: []
-        }
-      ];
-      saveMeetingsToStorage();
-    }
-
-    // ==========================================
     // Utilities
     // ==========================================
     function formatTimerSeconds(s) {
@@ -1529,15 +1545,6 @@
       return m === 0 ? `${sec}초` : `${m}분 ${sec}초`;
     }
     function formatDate(d) { return (d || '').replace('T', ' ').slice(0, 16); }
-    function getCategoryClass(c) {
-      switch(c) {
-        case '스프린트/주간회의': return 'cat-sprint';
-        case '고객/영업미팅': return 'cat-client';
-        case '기획/브레인스토밍': return 'cat-plan';
-        case '1:1면담/피드백': return 'cat-oneonone';
-        default: return 'cat-general';
-      }
-    }
     function escapeHtml(str) {
       if (!str) return '';
       return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
