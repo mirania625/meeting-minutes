@@ -699,12 +699,13 @@
     // ==========================================
     // Standalone Storage & State
     // ==========================================
-    const DEFAULT_CATEGORIES = ["일반", "팀회의", "프로젝트", "아이디어"];
+    // 사용자가 처음부터 직접 분류를 만들 수 있도록 기본 카테고리를 비워둡니다.
+    const DEFAULT_CATEGORIES = [];
 
     const state = {
       apiKey: localStorage.getItem("MEETAI_API_KEY") || "",
       meetings: JSON.parse(localStorage.getItem("MEETAI_MEETINGS") || "[]"),
-      categories: JSON.parse(localStorage.getItem("MEETAI_CATEGORIES") || JSON.stringify(DEFAULT_CATEGORIES)),
+      categories: JSON.parse(localStorage.getItem("MEETAI_CATEGORIES") || "[]"),
       currentFilter: "전체",
       searchQuery: "",
       selectedMeeting: null,
@@ -911,33 +912,49 @@
       });
 
       // Update Select in Record Modal
-      let selectHtml = '';
-      state.categories.forEach(cat => {
-        selectHtml += `<option value="${escapeHtml(cat)}">${escapeHtml(cat)}</option>`;
-      });
-      selectHtml += `<option value="__custom__">+ 새 분류 직접 입력...</option>`;
-      el.recordCatSelect.innerHTML = selectHtml;
+      if (state.categories.length === 0) {
+        el.recordCatSelect.style.display = 'none';
+        el.recordCatCustom.style.display = 'block';
+        el.recordCatCustom.placeholder = '회의 분류 입력 (예: 주간회의, 마케팅 등)';
+      } else {
+        el.recordCatSelect.style.display = 'block';
+        let selectHtml = '';
+        state.categories.forEach(cat => {
+          selectHtml += `<option value="${escapeHtml(cat)}">${escapeHtml(cat)}</option>`;
+        });
+        selectHtml += `<option value="__custom__">+ 새 분류 직접 입력...</option>`;
+        el.recordCatSelect.innerHTML = selectHtml;
+        el.recordCatCustom.style.display = el.recordCatSelect.value === '__custom__' ? 'block' : 'none';
+      }
     }
 
     function openSettingsModal() {
       el.apiKeyInput.value = state.apiKey;
       
-      // Render Category Manager list in settings
-      el.customCatManagerList.innerHTML = state.categories.map((cat, idx) => `
-        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.03); padding:6px 10px; border-radius:6px; font-size:12.5px;">
-          <span>📁 ${escapeHtml(cat)}</span>
-          ${state.categories.length > 1 ? `<button onclick="deleteCategory(${idx})" style="background:none; border:none; color:var(--accent-rose); cursor:pointer;"><i class="fa-solid fa-trash"></i></button>` : ''}
-        </div>
-      `).join('');
+      if (state.categories.length === 0) {
+        el.customCatManagerList.innerHTML = '<p class="text-muted" style="font-size:12px; padding:4px 0;">등록된 분류가 없습니다. 상단 [+ 분류] 버튼으로 추가하세요.</p>';
+      } else {
+        el.customCatManagerList.innerHTML = state.categories.map((cat, idx) => `
+          <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.03); padding:6px 10px; border-radius:6px; font-size:12.5px;">
+            <span>📁 ${escapeHtml(cat)}</span>
+            <button onclick="deleteCategory(${idx})" style="background:none; border:none; color:var(--accent-rose); cursor:pointer; padding:4px 8px;"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        `).join('');
+      }
 
       el.settingsModal.classList.add('active');
     }
 
     window.deleteCategory = function(idx) {
-      if (confirm(`'${state.categories[idx]}' 분류를 삭제하시겠습니까?`)) {
+      const catName = state.categories[idx];
+      if (confirm(`'${catName}' 분류를 삭제하시겠습니까?`)) {
         state.categories.splice(idx, 1);
         localStorage.setItem('MEETAI_CATEGORIES', JSON.stringify(state.categories));
+        if (state.currentFilter === catName) {
+          state.currentFilter = '전체';
+        }
         renderCategoryTabs();
+        renderMeetings();
         openSettingsModal();
       }
     };
