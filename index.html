@@ -1520,6 +1520,167 @@
     }
 
     // ==========================================
+    // Category Tabs Management
+    // ==========================================
+    function renderCategoryTabs() {
+      let html = `<button class="cat-chip ${state.currentFilter === '전체' ? 'active' : ''}" data-cat="전체"><span>전체</span></button>`;
+      
+      state.categories.forEach(cat => {
+        html += `<button class="cat-chip ${state.currentFilter === cat ? 'active' : ''}" data-cat="${escapeHtml(cat)}"><span>${escapeHtml(cat)}</span></button>`;
+      });
+
+      el.categoryTabs.innerHTML = html;
+
+      el.categoryTabs.querySelectorAll('.cat-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+          el.categoryTabs.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          state.currentFilter = chip.dataset.cat;
+          renderMeetings();
+        });
+      });
+
+      // Update Select in Record & Text Modals
+      updateModalCategorySelectors();
+    }
+
+    function updateModalCategorySelectors() {
+      [el.recordCatSelect, el.textCatSelect].forEach((sel, idx) => {
+        if (!sel) return;
+        const customInput = idx === 0 ? el.recordCatCustom : el.textCatCustom;
+        if (state.categories.length === 0) {
+          sel.style.display = 'none';
+          if (customInput) {
+            customInput.style.display = 'block';
+            customInput.placeholder = '회의 분류 입력 (예: 주간보고, 기획 등)';
+          }
+        } else {
+          sel.style.display = 'block';
+          let selectHtml = '';
+          state.categories.forEach(cat => {
+            selectHtml += `<option value="${escapeHtml(cat)}">${escapeHtml(cat)}</option>`;
+          });
+          selectHtml += `<option value="__custom__">+ 새 분류 직접 입력...</option>`;
+          sel.innerHTML = selectHtml;
+          if (customInput) {
+            customInput.style.display = sel.value === '__custom__' ? 'block' : 'none';
+          }
+        }
+      });
+    }
+
+    function openSettingsModal() {
+      el.apiKeyInput.value = state.apiKey;
+      if (el.glossaryInput) el.glossaryInput.value = state.glossary;
+      if (state.categories.length === 0) {
+        el.customCatManagerList.innerHTML = '<p class="text-muted" style="font-size:12px; padding:4px 0;">등록된 분류가 없습니다. 상단 [+ 분류] 버튼으로 추가하세요.</p>';
+      } else {
+        el.customCatManagerList.innerHTML = state.categories.map((cat, idx) => `
+          <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.03); padding:6px 10px; border-radius:6px; font-size:12.5px;">
+            <span>📁 ${escapeHtml(cat)}</span>
+            <button onclick="deleteCategory(${idx})" style="background:none; border:none; color:var(--accent-rose); cursor:pointer; padding:4px 8px;"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        `).join('');
+      }
+      el.settingsModal.classList.add('active');
+    }
+
+    window.deleteCategory = function(idx) {
+      const catName = state.categories[idx];
+      if (confirm(`'${catName}' 분류를 삭제하시겠습니까?`)) {
+        state.categories.splice(idx, 1);
+        localStorage.setItem('MEETAI_CATEGORIES', JSON.stringify(state.categories));
+        if (state.currentFilter === catName) state.currentFilter = '전체';
+        renderCategoryTabs();
+        renderMeetings();
+        openSettingsModal();
+      }
+    };
+
+    function changeCurrentMeetingCategory() {
+      if (!state.selectedMeeting) return;
+      const newCat = prompt(`회의 분류를 변경하세요 (현재: ${state.selectedMeeting.category}):`, state.selectedMeeting.category);
+      if (newCat && newCat.trim()) {
+        const trimmed = newCat.trim();
+        state.selectedMeeting.category = trimmed;
+        if (!state.categories.includes(trimmed)) {
+          state.categories.push(trimmed);
+          localStorage.setItem('MEETAI_CATEGORIES', JSON.stringify(state.categories));
+          renderCategoryTabs();
+        }
+        saveMeetingsToStorage();
+        el.detailCategory.textContent = trimmed;
+        showToast(`분류가 '${trimmed}'(으)로 변경되었습니다.`);
+      }
+    }
+
+    // ==========================================
+    // Render Meetings
+    // ==========================================
+    function renderMeetings() {
+      let filtered = state.meetings || [];
+
+      if (state.currentFilter !== '전체') {
+        filtered = filtered.filter(m => m.category === state.currentFilter);
+        el.currentFilterTitle.textContent = state.currentFilter;
+      } else {
+        el.currentFilterTitle.textContent = '모든 회의록';
+      }
+
+      if (state.searchQuery) {
+        filtered = filtered.filter(m => {
+          const title = (m.title || '').toLowerCase();
+          const overview = (m.overview || '').toLowerCase();
+          const topics = (m.topic_summaries || []).map(t => (t.topic || '') + ' ' + (t.points || []).join(' ')).join(' ').toLowerCase();
+          const tags = (m.tags || []).join(' ').toLowerCase();
+          const transcript = (m.transcript || []).map(t => t.text || '').join(' ').toLowerCase();
+          return title.includes(state.searchQuery) || overview.includes(state.searchQuery) || topics.includes(state.searchQuery) || tags.includes(state.searchQuery) || transcript.includes(state.searchQuery);
+        });
+      }
+
+      el.totalCountText.textContent = `${filtered.length}건`;
+
+      if (filtered.length === 0) {
+        el.meetingList.innerHTML = '';
+        el.emptyState.style.display = 'flex';
+        return;
+      }
+
+      el.emptyState.style.display = 'none';
+      el.meetingList.innerHTML = filtered.map(m => {
+        const previewText = m.overview || (m.summary_3lines && m.summary_3lines[0]) || '요약 내용 없음';
+        const actions = m.action_items || [];
+        const doneCount = actions.filter(a => a.done).length;
+        const hasPending = actions.length > 0 && doneCount < actions.length;
+        const tagsHtml = (m.tags || []).slice(0, 3).map(t => `<span class="tag-item">${escapeHtml(t)}</span>`).join('');
+
+        return `
+          <div class="meeting-card" onclick="openMeetingDetail('${m.id}')">
+            <div class="card-top-row">
+              <span class="card-category-badge">${escapeHtml(m.category || '일반')}</span>
+              <span class="card-meta-time"><i class="fa-regular fa-clock"></i> ${formatDate(m.meeting_date)}</span>
+            </div>
+            <h3 class="card-title">${escapeHtml(m.title)}</h3>
+            <p class="card-summary-preview">${escapeHtml(previewText)}</p>
+            <div class="card-bottom-row">
+              <div class="card-tags">${tagsHtml}</div>
+              ${actions.length > 0 ? `
+                <span class="card-action-counter ${hasPending ? 'has-pending' : ''}">
+                  <i class="fa-solid fa-list-check"></i> 할일 ${doneCount}/${actions.length}
+                </span>
+              ` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function saveMeetingsToStorage() {
+      localStorage.setItem('MEETAI_MEETINGS', JSON.stringify(state.meetings));
+      renderMeetings();
+    }
+
+    // ==========================================
     // Recording & Audio
     // ==========================================
     function openRecordModal() {
@@ -2304,6 +2465,11 @@
       el.toast.classList.add('show');
       setTimeout(() => el.toast.classList.remove('show'), 2800);
     }
+
+    // Expose handlers for template literals
+    window.openMeetingDetail = openMeetingDetail;
+    window.toggleActionItem = toggleActionItem;
+    window.deleteCategory = deleteCategory;
   </script>
 </body>
 </html>
