@@ -476,6 +476,130 @@
     }
     .text-input-area:focus { border-color: var(--primary); }
 
+    /* Recovery Banner */
+    .recovery-banner {
+      margin: 10px 18px 0 18px;
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.18), rgba(99, 102, 241, 0.18));
+      border: 1px solid rgba(245, 158, 11, 0.45);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+      animation: fadeIn 0.3s ease;
+    }
+    .recovery-info { display: flex; align-items: center; gap: 10px; flex: 1; }
+    .recovery-icon {
+      width: 36px; height: 36px; border-radius: var(--radius-full);
+      background: rgba(245, 158, 11, 0.25); color: var(--accent-amber);
+      display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;
+    }
+    .recovery-title { font-size: 13px; font-weight: 700; color: #FDE68A; }
+    .recovery-desc { font-size: 11.5px; color: var(--text-secondary); margin-top: 2px; line-height: 1.4; }
+    .recovery-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .btn-recover {
+      padding: 8px 12px; background: linear-gradient(135deg, #F59E0B, #D97706);
+      border: none; border-radius: var(--radius-sm); color: #fff; font-size: 12px; font-weight: 700;
+      cursor: pointer; display: flex; align-items: center; gap: 4px; box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+    }
+    .btn-recover:active { transform: scale(0.96); }
+    .btn-discard {
+      width: 32px; height: 32px; background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-muted);
+      font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    .btn-discard:hover { color: var(--accent-rose); border-color: var(--accent-rose); }
+
+    /* Background Recording Guide Badge inside Sheet */
+    .bg-rec-guide {
+      display: flex; align-items: center; gap: 8px; font-size: 11.5px;
+      color: #C7D2FE; background: rgba(99, 102, 241, 0.12); border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: var(--radius-md); padding: 8px 12px; line-height: 1.4;
+    }
+    .bg-rec-guide i { color: #818CF8; font-size: 14px; flex-shrink: 0; }
+
+    /* OLED Battery Saver & Touch Lock Overlay */
+    .battery-saver-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      width: 100vw; height: 100vh;
+      background-color: #000000;
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+    .saver-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      text-align: center;
+      padding: 30px;
+    }
+    .saver-pulse-dot {
+      width: 10px; height: 10px;
+      border-radius: var(--radius-full);
+      background: #EF4444;
+      opacity: 0.5;
+      animation: saver-blink 2s infinite ease-in-out;
+    }
+    @keyframes saver-blink {
+      0% { opacity: 0.2; transform: scale(0.9); }
+      50% { opacity: 0.7; transform: scale(1.1); }
+      100% { opacity: 0.2; transform: scale(0.9); }
+    }
+    .saver-timer {
+      font-family: var(--font-brand);
+      font-size: 34px;
+      font-weight: 700;
+      color: #475569;
+      letter-spacing: 1px;
+    }
+    .saver-status {
+      font-size: 12px;
+      color: #334155;
+      font-weight: 500;
+    }
+    .saver-unlock-guide {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11.5px;
+      color: #334155;
+      margin-top: 18px;
+      background: rgba(255, 255, 255, 0.02);
+      padding: 8px 14px;
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+    .btn-saver-unlock {
+      margin-top: 8px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #64748B;
+      padding: 8px 20px;
+      border-radius: var(--radius-full);
+      font-size: 12.5px;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .btn-saver-unlock:hover, .btn-saver-unlock:active {
+      background: rgba(255, 255, 255, 0.15);
+      color: #F8FAFC;
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
     /* Toast */
     .toast {
       position: absolute; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
@@ -507,6 +631,25 @@
         </button>
       </div>
     </header>
+ 
+    <!-- Recovery Banner (Restores Interrupted Audio) -->
+    <div id="recovery-banner" class="recovery-banner" style="display: none;">
+      <div class="recovery-info">
+        <div class="recovery-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+        <div>
+          <div class="recovery-title">이전 미완료 녹음 복구됨</div>
+          <div class="recovery-desc" id="recovery-desc">중단 전 녹음된 음성 데이터가 안전하게 복구되었습니다.</div>
+        </div>
+      </div>
+      <div class="recovery-actions">
+        <button id="btn-recover-recording" class="btn-recover" type="button">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> 복구
+        </button>
+        <button id="btn-discard-recovery" class="btn-discard" type="button" title="삭제">
+          <i class="fa-solid fa-trash"></i>
+        </button>
+      </div>
+    </div>
 
     <!-- Search & Filter -->
     <section class="search-section">
@@ -572,6 +715,11 @@
           </button>
         </div>
 
+        <div class="bg-rec-guide">
+          <i class="fa-solid fa-shield-halved"></i>
+          <span><strong>백그라운드 녹음 지원:</strong> 화면 전환/다른 앱 이동 시에도 녹음이 유지되며 매초 실시간 자동 백업됩니다.</span>
+        </div>
+
         <!-- Custom Category Selector -->
         <div class="form-group-custom">
           <label><i class="fa-solid fa-folder-open"></i> 회의 분류 선택/직접입력</label>
@@ -607,6 +755,11 @@
           
           <button id="btn-main-record" class="btn-circle-record" type="button">
             <i class="fa-solid fa-microphone" id="main-record-icon"></i>
+          </button>
+
+          <button id="btn-battery-saver" class="btn-tool" type="button" disabled title="화면 절전 & 터치 잠금 (OLED 블랙)">
+            <i class="fa-solid fa-moon"></i>
+            <span>화면 절전</span>
           </button>
 
           <button id="btn-upload-file" class="btn-tool" type="button">
@@ -777,10 +930,192 @@
       </div>
     </div>
 
+    <!-- OLED Battery Saver / Touch Lock Overlay -->
+    <div id="battery-saver-overlay" class="battery-saver-overlay" style="display: none;">
+      <div class="saver-content">
+        <div class="saver-pulse-dot"></div>
+        <div class="saver-timer" id="saver-timer">00:00:00</div>
+        <div class="saver-status">🔴 회의 녹음 진행 중 (OLED 절전 & 터치 잠금)</div>
+        <div class="saver-unlock-guide">
+          <i class="fa-solid fa-lock"></i>
+          <span>화면을 <strong>길게 누르거나 더블 탭</strong>하면 잠금이 해제됩니다</span>
+        </div>
+        <button id="btn-exit-saver" class="btn-saver-unlock" type="button">
+          <i class="fa-solid fa-lock-open"></i> 절전 모드 해제
+        </button>
+      </div>
+    </div>
+
     <div id="toast" class="toast"></div>
   </div>
 
   <script>
+    // ==========================================
+    // IndexedDB Realtime Audio & Session Persistence
+    // ==========================================
+    const MeetAIDB = {
+      dbPromise: null,
+      init() {
+        if (!this.dbPromise) {
+          this.dbPromise = new Promise((resolve, reject) => {
+            const req = indexedDB.open('MeetAIDatabase', 1);
+            req.onupgradeneeded = (e) => {
+              const db = e.target.result;
+              if (!db.objectStoreNames.contains('active_session')) {
+                db.createObjectStore('active_session', { keyPath: 'id' });
+              }
+              if (!db.objectStoreNames.contains('audio_chunks')) {
+                db.createObjectStore('audio_chunks', { keyPath: 'index' });
+              }
+            };
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => reject(req.error);
+          });
+        }
+        return this.dbPromise;
+      },
+      async saveChunk(index, blobChunk) {
+        try {
+          const db = await this.init();
+          return new Promise((resolve, reject) => {
+            const tx = db.transaction('audio_chunks', 'readwrite');
+            const store = tx.objectStore('audio_chunks');
+            store.put({ index, blob: blobChunk });
+            tx.oncomplete = () => resolve();
+            tx.onerror = () => reject(tx.error);
+          });
+        } catch(e) {
+          console.warn('DB saveChunk error:', e);
+        }
+      },
+      async saveMeta(meta) {
+        try {
+          const db = await this.init();
+          return new Promise((resolve, reject) => {
+            const tx = db.transaction('active_session', 'readwrite');
+            const store = tx.objectStore('active_session');
+            store.put({ id: 'current', ...meta });
+            tx.oncomplete = () => resolve();
+            tx.onerror = () => reject(tx.error);
+          });
+        } catch(e) {
+          console.warn('DB saveMeta error:', e);
+        }
+      },
+      async getSession() {
+        try {
+          const db = await this.init();
+          const meta = await new Promise((resolve, reject) => {
+            const tx = db.transaction('active_session', 'readonly');
+            const req = tx.objectStore('active_session').get('current');
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => reject(req.error);
+          });
+          if (!meta) return null;
+
+          const chunks = await new Promise((resolve, reject) => {
+            const tx = db.transaction('audio_chunks', 'readonly');
+            const req = tx.objectStore('audio_chunks').getAll();
+            req.onsuccess = () => resolve(req.result || []);
+            req.onerror = () => reject(req.error);
+          });
+
+          chunks.sort((a, b) => a.index - b.index);
+          return { meta, chunks: chunks.map(c => c.blob) };
+        } catch(e) {
+          console.warn('DB getSession error:', e);
+          return null;
+        }
+      },
+      async clear() {
+        try {
+          const db = await this.init();
+          return new Promise((resolve, reject) => {
+            const tx = db.transaction(['active_session', 'audio_chunks'], 'readwrite');
+            tx.objectStore('active_session').clear();
+            tx.objectStore('audio_chunks').clear();
+            tx.oncomplete = () => resolve();
+            tx.onerror = () => reject(tx.error);
+          });
+        } catch(e) {
+          console.warn('DB clear error:', e);
+        }
+      }
+    };
+
+    // ==========================================
+    // Mobile Background Audio Keepalive & Wake Lock
+    // ==========================================
+    let silentAudioEl = null;
+    let wakeLock = null;
+
+    function initSilentAudio() {
+      if (!silentAudioEl) {
+        silentAudioEl = document.createElement('audio');
+        silentAudioEl.setAttribute('playsinline', '');
+        silentAudioEl.setAttribute('webkit-playsinline', '');
+        silentAudioEl.loop = true;
+        // Ultra-compact silent WAV track
+        silentAudioEl.src = 'data:audio/wav;base64,UklGRjIAAABXQVZFZm10IBIAAAABAAEAQB8AAEAfAAABAAgAAABmYWN0BAAAAAAAAABkYXRhAAAAAA==';
+      }
+    }
+
+    async function startBackgroundAudioRetention() {
+      initSilentAudio();
+      try {
+        await silentAudioEl.play();
+      } catch (e) {
+        console.log('Silent audio playback info:', e);
+      }
+
+      if ('mediaSession' in navigator) {
+        try {
+          navigator.mediaSession.metadata = new MediaMetadata({
+            title: '🔴 회의 음성 녹음 진행 중...',
+            artist: 'MeetAI 스마트 회의 비서',
+            album: '화면 전환 및 다른 앱 이동 시에도 녹음 유지'
+          });
+          navigator.mediaSession.playbackState = 'playing';
+          navigator.mediaSession.setActionHandler('stop', () => {
+            stopRecording();
+          });
+        } catch(e) {
+          console.warn('MediaSession error:', e);
+        }
+      }
+
+      if ('wakeLock' in navigator) {
+        try {
+          wakeLock = await navigator.wakeLock.request('screen');
+          wakeLock.addEventListener('release', () => {
+            wakeLock = null;
+          });
+        } catch (err) {
+          console.warn('Wake Lock error:', err);
+        }
+      }
+    }
+
+    function stopBackgroundAudioRetention() {
+      if (silentAudioEl) {
+        try {
+          silentAudioEl.pause();
+          silentAudioEl.currentTime = 0;
+        } catch(e){}
+      }
+      if ('mediaSession' in navigator) {
+        try {
+          navigator.mediaSession.playbackState = 'none';
+        } catch(e){}
+      }
+      if (wakeLock) {
+        try {
+          wakeLock.release();
+        } catch(e){}
+        wakeLock = null;
+      }
+    }
+
     // ==========================================
     // Standalone Storage & State
     // ==========================================
@@ -797,6 +1132,7 @@
       
       // Recording State
       isRecording: false,
+      isSaverMode: false,
       mediaRecorder: null,
       audioStream: null,
       audioChunks: [],
@@ -822,6 +1158,16 @@
       totalCountText: document.getElementById('total-count-text'),
       currentFilterTitle: document.getElementById('current-filter-title'),
       
+      recoveryBanner: document.getElementById('recovery-banner'),
+      recoveryDesc: document.getElementById('recovery-desc'),
+      btnRecoverRecording: document.getElementById('btn-recover-recording'),
+      btnDiscardRecovery: document.getElementById('btn-discard-recovery'),
+
+      batterySaverOverlay: document.getElementById('battery-saver-overlay'),
+      saverTimer: document.getElementById('saver-timer'),
+      btnExitSaver: document.getElementById('btn-exit-saver'),
+      btnBatterySaver: document.getElementById('btn-battery-saver'),
+
       recordModal: document.getElementById('record-modal'),
       textModal: document.getElementById('text-modal'),
       detailModal: document.getElementById('detail-modal'),
@@ -885,16 +1231,56 @@
     // ==========================================
     // Init
     // ==========================================
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
       initListeners();
       renderCategoryTabs();
       renderMeetings();
       drawEmptyWaveform();
       el.apiKeyInput.value = state.apiKey;
       if (el.glossaryInput) el.glossaryInput.value = state.glossary;
+      await checkUnfinishedSession();
     });
 
     function initListeners() {
+      // 0. 녹음 복구 버튼
+      if (el.btnRecoverRecording) el.btnRecoverRecording.addEventListener('click', recoverSavedSession);
+      if (el.btnDiscardRecovery) el.btnDiscardRecovery.addEventListener('click', discardSavedSession);
+
+      // 0-1. 배터리 절약 모드 버튼 & 해제 이벤트
+      if (el.btnBatterySaver) el.btnBatterySaver.addEventListener('click', enterBatterySaver);
+      if (el.btnExitSaver) el.btnExitSaver.addEventListener('click', exitBatterySaver);
+
+      // 더블 탭 및 롱프레스 제스처로 잠금 해제 지원
+      if (el.batterySaverOverlay) {
+        let lastTap = 0;
+        let pressTimer = null;
+
+        el.batterySaverOverlay.addEventListener('touchstart', (e) => {
+          if (e.target === el.btnExitSaver || el.btnExitSaver.contains(e.target)) return;
+          const now = Date.now();
+          if (now - lastTap < 350) {
+            // Double Tap Unlocks
+            clearTimeout(pressTimer);
+            exitBatterySaver();
+            return;
+          }
+          lastTap = now;
+
+          // Long press 600ms Unlocks
+          pressTimer = setTimeout(() => {
+            exitBatterySaver();
+          }, 600);
+        }, { passive: true });
+
+        el.batterySaverOverlay.addEventListener('touchend', () => {
+          clearTimeout(pressTimer);
+        });
+
+        el.batterySaverOverlay.addEventListener('touchcancel', () => {
+          clearTimeout(pressTimer);
+        });
+      }
+
       // 1. 녹음 모달 열기
       const handleOpenRecord = (e) => {
         if (e) e.preventDefault();
@@ -997,162 +1383,140 @@
       el.btnToggleKeyVisibility.addEventListener('click', () => {
         el.apiKeyInput.type = el.apiKeyInput.type === 'password' ? 'text' : 'password';
       });
-    }
 
-    // ==========================================
-    // Category Tabs Management
-    // ==========================================
-    function renderCategoryTabs() {
-      let html = `<button class="cat-chip ${state.currentFilter === '전체' ? 'active' : ''}" data-cat="전체"><span>전체</span></button>`;
-      
-      state.categories.forEach(cat => {
-        html += `<button class="cat-chip ${state.currentFilter === cat ? 'active' : ''}" data-cat="${escapeHtml(cat)}"><span>${escapeHtml(cat)}</span></button>`;
+      // 8. Mobile App Visibility & Screen Change Event Handler
+      document.addEventListener('visibilitychange', async () => {
+        if (document.visibilityState === 'visible') {
+          if (state.isRecording) {
+            // 1. Resync timer using wall-clock time
+            if (state.recordStartTime) {
+              state.recordSeconds = Math.floor((Date.now() - state.recordStartTime) / 1000);
+              el.recordTimer.textContent = formatTimerSeconds(state.recordSeconds);
+              if (state.isSaverMode) el.saverTimer.textContent = formatTimerSeconds(state.recordSeconds);
+            }
+            // 2. Resume AudioContext
+            if (state.audioContext && state.audioContext.state === 'suspended') {
+              try { await state.audioContext.resume(); } catch(e){}
+            }
+            // 3. Re-acquire WakeLock if lost
+            if (!wakeLock && 'wakeLock' in navigator) {
+              try { wakeLock = await navigator.wakeLock.request('screen'); } catch(e){}
+            }
+            // 4. Ensure silent audio is playing
+            if (silentAudioEl && silentAudioEl.paused) {
+              silentAudioEl.play().catch(()=>{});
+            }
+            if (!state.isSaverMode) {
+              showToast('📱 백그라운드 녹음이 정상적으로 유지되었습니다.');
+            }
+          }
+        }
       });
 
-      el.categoryTabs.innerHTML = html;
-
-      el.categoryTabs.querySelectorAll('.cat-chip').forEach(chip => {
-        chip.addEventListener('click', () => {
-          el.categoryTabs.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
-          chip.classList.add('active');
-          state.currentFilter = chip.dataset.cat;
-          renderMeetings();
-        });
-      });
-
-      // Update Select in Record & Text Modals
-      updateModalCategorySelectors();
-    }
-
-    function updateModalCategorySelectors() {
-      [el.recordCatSelect, el.textCatSelect].forEach((sel, idx) => {
-        const customInput = idx === 0 ? el.recordCatCustom : el.textCatCustom;
-        if (state.categories.length === 0) {
-          sel.style.display = 'none';
-          customInput.style.display = 'block';
-          customInput.placeholder = '회의 분류 입력 (예: 주간보고, 기획 등)';
-        } else {
-          sel.style.display = 'block';
-          let selectHtml = '';
-          state.categories.forEach(cat => {
-            selectHtml += `<option value="${escapeHtml(cat)}">${escapeHtml(cat)}</option>`;
-          });
-          selectHtml += `<option value="__custom__">+ 새 분류 직접 입력...</option>`;
-          sel.innerHTML = selectHtml;
-          customInput.style.display = sel.value === '__custom__' ? 'block' : 'none';
+      // 9. Prevent accidental tab close during active recording
+      window.addEventListener('beforeunload', (e) => {
+        if (state.isRecording) {
+          e.preventDefault();
+          e.returnValue = '현재 회의 음성 녹음 중입니다. 화면을 닫으시겠습니까?';
+          return e.returnValue;
         }
       });
     }
 
-    function openSettingsModal() {
-      el.apiKeyInput.value = state.apiKey;
-      if (el.glossaryInput) el.glossaryInput.value = state.glossary;
-      if (state.categories.length === 0) {
-        el.customCatManagerList.innerHTML = '<p class="text-muted" style="font-size:12px; padding:4px 0;">등록된 분류가 없습니다. 상단 [+ 분류] 버튼으로 추가하세요.</p>';
-      } else {
-        el.customCatManagerList.innerHTML = state.categories.map((cat, idx) => `
-          <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.03); padding:6px 10px; border-radius:6px; font-size:12.5px;">
-            <span>📁 ${escapeHtml(cat)}</span>
-            <button onclick="deleteCategory(${idx})" style="background:none; border:none; color:var(--accent-rose); cursor:pointer; padding:4px 8px;"><i class="fa-solid fa-trash"></i></button>
-          </div>
-        `).join('');
-      }
-      el.settingsModal.classList.add('active');
+    // ==========================================
+    // OLED Battery Saver Functions
+    // ==========================================
+    function enterBatterySaver() {
+      if (!state.isRecording) return;
+      state.isSaverMode = true;
+      el.saverTimer.textContent = formatTimerSeconds(state.recordSeconds);
+      el.batterySaverOverlay.style.display = 'flex';
+      showToast('🌙 OLED 배터리 절약 & 터치 잠금 모드 켜짐');
     }
 
-    window.deleteCategory = function(idx) {
-      const catName = state.categories[idx];
-      if (confirm(`'${catName}' 분류를 삭제하시겠습니까?`)) {
-        state.categories.splice(idx, 1);
-        localStorage.setItem('MEETAI_CATEGORIES', JSON.stringify(state.categories));
-        if (state.currentFilter === catName) state.currentFilter = '전체';
-        renderCategoryTabs();
-        renderMeetings();
-        openSettingsModal();
+    function exitBatterySaver() {
+      if (!state.isSaverMode) return;
+      state.isSaverMode = false;
+      el.batterySaverOverlay.style.display = 'none';
+      if (state.isRecording && state.analyser) {
+        drawWaveform();
       }
-    };
+      showToast('☀️ 화면 절전 모드가 해제되었습니다.');
+    }
 
-    function changeCurrentMeetingCategory() {
-      if (!state.selectedMeeting) return;
-      const newCat = prompt(`회의 분류를 변경하세요 (현재: ${state.selectedMeeting.category}):`, state.selectedMeeting.category);
-      if (newCat && newCat.trim()) {
-        const trimmed = newCat.trim();
-        state.selectedMeeting.category = trimmed;
-        if (!state.categories.includes(trimmed)) {
-          state.categories.push(trimmed);
-          localStorage.setItem('MEETAI_CATEGORIES', JSON.stringify(state.categories));
-          renderCategoryTabs();
+    // ==========================================
+    // Recovery Management Functions
+    // ==========================================
+    async function checkUnfinishedSession() {
+      try {
+        const session = await MeetAIDB.getSession();
+        if (session && session.chunks && session.chunks.length > 0 && session.meta) {
+          const elapsed = session.meta.elapsedSeconds || 0;
+          if (elapsed >= 2) {
+            el.recoveryBanner.style.display = 'flex';
+            el.recoveryDesc.textContent = `중단 전 녹음된 음성 (${formatDuration(elapsed)}, ${session.chunks.length}개 구간)이 안전하게 보존되었습니다.`;
+            return;
+          }
         }
-        saveMeetingsToStorage();
-        el.detailCategory.textContent = trimmed;
-        showToast(`분류가 '${trimmed}'(으)로 변경되었습니다.`);
+        el.recoveryBanner.style.display = 'none';
+      } catch (e) {
+        console.warn('checkUnfinishedSession err', e);
       }
     }
 
-    // ==========================================
-    // Render Meetings
-    // ==========================================
-    function renderMeetings() {
-      let filtered = state.meetings;
+    async function recoverSavedSession() {
+      try {
+        const session = await MeetAIDB.getSession();
+        if (!session || !session.chunks || session.chunks.length === 0) {
+          showToast('복구할 녹음 데이터가 없습니다.');
+          el.recoveryBanner.style.display = 'none';
+          return;
+        }
 
-      if (state.currentFilter !== '전체') {
-        filtered = filtered.filter(m => m.category === state.currentFilter);
-        el.currentFilterTitle.textContent = state.currentFilter;
-      } else {
-        el.currentFilterTitle.textContent = '모든 회의록';
+        const type = session.meta.mimeType || 'audio/webm';
+        state.recordedBlob = new Blob(session.chunks, { type });
+        state.audioChunks = session.chunks;
+        state.recordSeconds = session.meta.elapsedSeconds || 0;
+        state.bookmarks = session.meta.bookmarks || [];
+
+        openRecordModal();
+        el.recordTimer.textContent = formatTimerSeconds(state.recordSeconds);
+        el.recStatusText.textContent = '복구된 녹음 완료';
+        el.micStatusHint.textContent = `복구된 음성 (${formatTimerSeconds(state.recordSeconds)}, ${(state.recordedBlob.size / (1024*1024)).toFixed(1)}MB)이 준비되었습니다. [AI 분석 시작]을 누르세요.`;
+        el.btnFinishAnalyze.disabled = false;
+
+        if (session.meta.hint) el.recordHint.value = session.meta.hint;
+        if (session.meta.category) {
+          if (state.categories.includes(session.meta.category)) {
+            el.recordCatSelect.value = session.meta.category;
+          } else if (session.meta.category) {
+            el.recordCatSelect.value = '__custom__';
+            el.recordCatCustom.style.display = 'block';
+            el.recordCatCustom.value = session.meta.category;
+          }
+        }
+
+        if (state.bookmarks.length > 0) {
+          el.bookmarkContainer.style.display = 'block';
+          el.bookmarkCount.textContent = `${state.bookmarks.length}개`;
+          el.bookmarkChips.innerHTML = state.bookmarks.map(b => `
+            <span class="bookmark-chip"><i class="fa-solid fa-bookmark"></i> ${b.time} ${escapeHtml(b.note)}</span>
+          `).join('');
+        }
+
+        el.recoveryBanner.style.display = 'none';
+        showToast('✨ 이전 녹음이 성공적으로 복구되었습니다! AI 분석을 진행할 수 있습니다.');
+      } catch (e) {
+        alert('복구 중 오류가 발생했습니다: ' + e.message);
       }
-
-      if (state.searchQuery) {
-        filtered = filtered.filter(m => {
-          const title = (m.title || '').toLowerCase();
-          const overview = (m.overview || '').toLowerCase();
-          const topics = (m.topic_summaries || []).map(t => (t.topic || '') + ' ' + (t.points || []).join(' ')).join(' ').toLowerCase();
-          const tags = (m.tags || []).join(' ').toLowerCase();
-          const transcript = (m.transcript || []).map(t => t.text || '').join(' ').toLowerCase();
-          return title.includes(state.searchQuery) || overview.includes(state.searchQuery) || topics.includes(state.searchQuery) || tags.includes(state.searchQuery) || transcript.includes(state.searchQuery);
-        });
-      }
-
-      el.totalCountText.textContent = `${filtered.length}건`;
-
-      if (filtered.length === 0) {
-        el.meetingList.innerHTML = '';
-        el.emptyState.style.display = 'flex';
-        return;
-      }
-
-      el.emptyState.style.display = 'none';
-      el.meetingList.innerHTML = filtered.map(m => {
-        const previewText = m.overview || (m.summary_3lines && m.summary_3lines[0]) || '요약 내용 없음';
-        const actions = m.action_items || [];
-        const doneCount = actions.filter(a => a.done).length;
-        const hasPending = actions.length > 0 && doneCount < actions.length;
-        const tagsHtml = (m.tags || []).slice(0, 3).map(t => `<span class="tag-item">${escapeHtml(t)}</span>`).join('');
-
-        return `
-          <div class="meeting-card" onclick="openMeetingDetail('${m.id}')">
-            <div class="card-top-row">
-              <span class="card-category-badge">${escapeHtml(m.category || '일반')}</span>
-              <span class="card-meta-time"><i class="fa-regular fa-clock"></i> ${formatDate(m.meeting_date)}</span>
-            </div>
-            <h3 class="card-title">${escapeHtml(m.title)}</h3>
-            <p class="card-summary-preview">${escapeHtml(previewText)}</p>
-            <div class="card-bottom-row">
-              <div class="card-tags">${tagsHtml}</div>
-              ${actions.length > 0 ? `
-                <span class="card-action-counter ${hasPending ? 'has-pending' : ''}">
-                  <i class="fa-solid fa-list-check"></i> 할일 ${doneCount}/${actions.length}
-                </span>
-              ` : ''}
-            </div>
-          </div>
-        `;
-      }).join('');
     }
 
-    function saveMeetingsToStorage() {
-      localStorage.setItem('MEETAI_MEETINGS', JSON.stringify(state.meetings));
-      renderMeetings();
+    async function discardSavedSession() {
+      if (confirm('복구 가능한 이전 녹음 데이터를 삭제하시겠습니까?')) {
+        await MeetAIDB.clear();
+        el.recoveryBanner.style.display = 'none';
+        showToast('이전 녹음 데이터가 삭제되었습니다.');
+      }
     }
 
     // ==========================================
@@ -1167,14 +1531,17 @@
 
     function closeRecordModal() {
       if (state.isRecording) {
-        if (!confirm('녹음 중입니다. 닫으시겠습니까?')) return;
+        if (!confirm('현재 녹음 중입니다. 녹음을 중지하고 닫으시겠습니까?\n(녹음된 내용은 복구 가능하도록 자동 보존됩니다)')) return;
         stopRecording();
       }
+      exitBatterySaver();
       el.recordModal.classList.remove('active');
       resetRecordingState();
     }
 
     function resetRecordingState() {
+      exitBatterySaver();
+      stopBackgroundAudioRetention();
       state.isRecording = false;
       state.audioChunks = [];
       state.recordedBlob = null;
@@ -1198,6 +1565,7 @@
       el.btnMainRecord.classList.remove('recording');
       el.mainRecordIcon.className = 'fa-solid fa-microphone';
       el.btnBookmark.disabled = true;
+      if (el.btnBatterySaver) el.btnBatterySaver.disabled = true;
       el.btnFinishAnalyze.disabled = true;
       el.bookmarkContainer.style.display = 'none';
       el.bookmarkChips.innerHTML = '';
@@ -1217,6 +1585,12 @@
           audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
         });
 
+        // 1. Start background audio keepalive & screen wake lock
+        await startBackgroundAudioRetention();
+
+        // 2. Clear any old session in IndexedDB
+        await MeetAIDB.clear();
+
         setupVisualizer(state.audioStream);
 
         let options = {};
@@ -1227,18 +1601,56 @@
         state.mediaRecorder = new MediaRecorder(state.audioStream, options);
         state.audioChunks = [];
 
-        state.mediaRecorder.ondataavailable = (e) => {
-          if (e.data && e.data.size > 0) state.audioChunks.push(e.data);
+        state.mediaRecorder.ondataavailable = async (e) => {
+          if (e.data && e.data.size > 0) {
+            state.audioChunks.push(e.data);
+            const chunkIdx = state.audioChunks.length - 1;
+            
+            // Save real-time audio chunk to IndexedDB
+            await MeetAIDB.saveChunk(chunkIdx, e.data);
+
+            const elapsed = state.recordStartTime ? Math.floor((Date.now() - state.recordStartTime) / 1000) : state.recordSeconds;
+            await MeetAIDB.saveMeta({
+              startTime: state.recordStartTime,
+              elapsedSeconds: elapsed,
+              category: el.recordCatSelect.value === '__custom__' ? el.recordCatCustom.value.trim() : el.recordCatSelect.value,
+              hint: el.recordHint.value.trim(),
+              bookmarks: state.bookmarks,
+              mimeType: state.mediaRecorder.mimeType || 'audio/webm',
+              status: 'recording',
+              lastUpdated: Date.now()
+            });
+          }
+        };
+
+        state.mediaRecorder.onerror = (e) => {
+          console.error('MediaRecorder error:', e);
+          stopRecording();
+          showToast('⚠️ 녹음이 중단되었으나 현재까지 음성은 보존되었습니다.');
         };
 
         state.mediaRecorder.onstop = () => {
-          const type = state.mediaRecorder.mimeType || 'audio/webm';
+          const type = (state.mediaRecorder && state.mediaRecorder.mimeType) || 'audio/webm';
           state.recordedBlob = new Blob(state.audioChunks, { type });
-          if (state.audioStream) state.audioStream.getTracks().forEach(t => t.stop());
+          if (state.audioStream) {
+            state.audioStream.getTracks().forEach(t => t.stop());
+            state.audioStream = null;
+          }
           el.btnFinishAnalyze.disabled = false;
           el.recStatusText.textContent = '녹음 완료';
-          el.micStatusHint.textContent = '녹음 완료! 하단의 [AI 분석 시작] 버튼을 누르세요.';
+          el.micStatusHint.textContent = `녹음 완료 (${formatTimerSeconds(state.recordSeconds)})! 하단의 [AI 분석 시작] 버튼을 누르세요.`;
         };
+
+        // Listen for track ending (e.g. system phone call or interruption)
+        state.audioStream.getAudioTracks().forEach(track => {
+          track.onended = () => {
+            if (state.isRecording) {
+              console.warn('Audio track ended');
+              stopRecording();
+              showToast('⚠️ 마이크 연결이 중단되어 현재까지 녹음이 보존되었습니다.');
+            }
+          };
+        });
 
         state.mediaRecorder.start(1000);
         state.isRecording = true;
@@ -1247,26 +1659,34 @@
         el.btnMainRecord.classList.add('recording');
         el.mainRecordIcon.className = 'fa-solid fa-stop';
         el.recDot.classList.add('recording');
-        el.recStatusText.textContent = '실시간 녹음 중...';
-        el.micStatusHint.textContent = '회의 음성을 녹음 중입니다. 중요 발언 시 [중요 마킹] 탭';
+        el.recStatusText.textContent = '실시간 녹음 중 (백그라운드 활성)...';
+        el.micStatusHint.textContent = '회의 음성을 녹음 중입니다. [화면 절전]으로 배터리를 절약할 수 있습니다.';
         el.btnBookmark.disabled = false;
+        if (el.btnBatterySaver) el.btnBatterySaver.disabled = false;
         el.btnFinishAnalyze.disabled = true;
 
         state.recordTimerInterval = setInterval(() => {
           state.recordSeconds = Math.floor((Date.now() - state.recordStartTime) / 1000);
           el.recordTimer.textContent = formatTimerSeconds(state.recordSeconds);
+          if (state.isSaverMode && el.saverTimer) {
+            el.saverTimer.textContent = formatTimerSeconds(state.recordSeconds);
+          }
         }, 1000);
 
       } catch (err) {
         console.error('마이크 에러:', err);
+        stopBackgroundAudioRetention();
         alert('마이크 접근 권한이 필요합니다. 브라우저 설정에서 마이크를 허용해주세요.');
         el.micStatusHint.textContent = '마이크 권한 허용이 필요합니다.';
       }
     }
 
     function stopRecording() {
+      exitBatterySaver();
+      stopBackgroundAudioRetention();
+
       if (state.mediaRecorder && state.mediaRecorder.state !== 'inactive') {
-        state.mediaRecorder.stop();
+        try { state.mediaRecorder.stop(); } catch(e){}
       }
       state.isRecording = false;
       clearInterval(state.recordTimerInterval);
@@ -1274,6 +1694,19 @@
       el.mainRecordIcon.className = 'fa-solid fa-microphone';
       el.recDot.classList.remove('recording');
       el.btnBookmark.disabled = true;
+      if (el.btnBatterySaver) el.btnBatterySaver.disabled = true;
+
+      // Update DB session as finished
+      MeetAIDB.saveMeta({
+        startTime: state.recordStartTime,
+        elapsedSeconds: state.recordSeconds,
+        category: el.recordCatSelect.value === '__custom__' ? el.recordCatCustom.value.trim() : el.recordCatSelect.value,
+        hint: el.recordHint.value.trim(),
+        bookmarks: state.bookmarks,
+        mimeType: (state.mediaRecorder && state.mediaRecorder.mimeType) || 'audio/webm',
+        status: 'finished',
+        lastUpdated: Date.now()
+      });
     }
 
     function setupVisualizer(stream) {
@@ -1298,7 +1731,7 @@
       const w = canvas.width, h = canvas.height;
 
       function frame() {
-        if (!state.isRecording) return;
+        if (!state.isRecording || state.isSaverMode) return;
         state.animationId = requestAnimationFrame(frame);
         state.analyser.getByteFrequencyData(state.dataArray);
         ctx.clearRect(0, 0, w, h);
@@ -1679,6 +2112,10 @@
 
         state.meetings.unshift(newMeeting);
         saveMeetingsToStorage();
+
+        // Clear temporary recording cache after successful save
+        await MeetAIDB.clear();
+        if (el.recoveryBanner) el.recoveryBanner.style.display = 'none';
 
         closeRecordModal();
         el.loadingOverlay.classList.remove('active');
