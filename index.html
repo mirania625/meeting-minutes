@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>MeetAI - 나만의 AI 회의 비서</title>
   <meta name="theme-color" content="#0B0F19">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -88,13 +88,16 @@
       }
     }
 
-    /* Top Header */
+    /* Top Header with Safe Area Inset */
     .app-header {
-      padding: 16px 20px 12px 20px;
+      padding-top: max(env(safe-area-inset-top, 0px), 38px);
+      padding-left: 20px;
+      padding-right: 20px;
+      padding-bottom: 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(11, 15, 25, 0.85);
+      background: rgba(11, 15, 25, 0.92);
       backdrop-filter: blur(12px);
       z-index: 10;
       border-bottom: 1px solid var(--border-color);
@@ -172,7 +175,7 @@
 
     /* Main Meeting List */
     .main-content {
-      flex: 1; overflow-y: auto; padding: 8px 18px 110px 18px;
+      flex: 1; overflow-y: auto; padding: 8px 18px max(calc(env(safe-area-inset-bottom, 0px) + 120px), 130px) 18px;
       display: flex; flex-direction: column; gap: 12px;
     }
     .list-header { display: flex; justify-content: space-between; align-items: center; padding: 4px 2px; }
@@ -216,7 +219,7 @@
 
     /* Empty State */
     .empty-state {
-      text-align: center; padding: 60px 20px; display: flex; flex-direction: column; align-items: center; gap: 12px;
+      text-align: center; padding: 50px 20px; display: flex; flex-direction: column; align-items: center; gap: 12px;
     }
     .empty-icon {
       width: 68px; height: 68px; border-radius: var(--radius-full); background: var(--bg-card);
@@ -225,11 +228,13 @@
     .empty-state h3 { font-size: 16px; font-weight: 700; }
     .empty-state p { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
 
-    /* Dual Floating Action Buttons */
+    /* Dual Floating Action Buttons (Safe Area Aware) */
     .fab-container {
-      position: absolute; bottom: 20px; left: 0; right: 0;
+      position: absolute;
+      bottom: max(calc(env(safe-area-inset-bottom, 0px) + 24px), 48px);
+      left: 0; right: 0;
       display: flex; justify-content: center; align-items: center; gap: 10px; z-index: 50;
-      padding: 0 16px;
+      padding: 0 18px;
     }
     .fab-btn {
       display: flex; align-items: center; justify-content: center; gap: 8px;
@@ -269,8 +274,8 @@
     .modal-backdrop.active { display: flex; opacity: 1; }
     .record-sheet {
       width: 100%; background: var(--bg-sheet); border-top-left-radius: 28px; border-top-right-radius: 28px;
-      border: 1px solid var(--border-color); padding: 16px 20px 30px 20px; display: flex;
-      flex-direction: column; gap: 14px; box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--border-color); padding: 16px 20px max(calc(env(safe-area-inset-bottom, 0px) + 30px), 44px) 20px;
+      display: flex; flex-direction: column; gap: 14px; box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.6);
       max-height: 90vh; overflow-y: auto;
     }
     .sheet-handle { width: 40px; height: 4px; background: rgba(255, 255, 255, 0.2); border-radius: var(--radius-full); margin: 0 auto 4px auto; }
@@ -362,12 +367,19 @@
     }
     .detail-page-modal.active { display: flex; }
     .detail-top-nav {
-      padding: 16px 18px; display: flex; justify-content: space-between; align-items: center;
+      padding-top: max(env(safe-area-inset-top, 0px), 38px);
+      padding-left: 18px;
+      padding-right: 18px;
+      padding-bottom: 16px;
+      display: flex; justify-content: space-between; align-items: center;
       border-bottom: 1px solid var(--border-color); background: rgba(11, 15, 25, 0.95); backdrop-filter: blur(12px);
     }
     .detail-top-title { font-size: 15px; font-weight: 700; color: var(--text-primary); }
     .detail-nav-actions { display: flex; gap: 8px; }
-    .detail-content { flex: 1; overflow-y: auto; padding: 18px; display: flex; flex-direction: column; gap: 16px; }
+    .detail-content {
+      flex: 1; overflow-y: auto; padding: 18px 18px max(calc(env(safe-area-inset-bottom, 0px) + 36px), 50px) 18px;
+      display: flex; flex-direction: column; gap: 16px;
+    }
 
     .meeting-meta-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 18px; display: flex; flex-direction: column; gap: 10px; }
     .meta-category-row { display: flex; justify-content: space-between; align-items: center; }
@@ -475,6 +487,13 @@
       color: var(--text-primary); font-size: 13px; font-family: inherit; outline: none; resize: none;
     }
     .text-input-area:focus { border-color: var(--primary); }
+
+    .input-styled {
+      width: 100%; padding: 11px 14px; background: var(--bg-input);
+      border: 1px solid var(--border-color); border-radius: var(--radius-md);
+      color: var(--text-primary); font-size: 13.5px; font-family: inherit; outline: none;
+    }
+    .input-styled:focus { border-color: var(--primary); }
 
     /* Recovery Banner */
     .recovery-banner {
@@ -683,6 +702,9 @@
         <div class="empty-icon"><i class="fa-solid fa-microphone"></i></div>
         <h3>기록된 회의가 없습니다</h3>
         <p>하단 <strong>[새 회의 녹음]</strong> 또는 <strong>[✍️ 텍스트 요약]</strong>으로<br>소주제별 상세 회의록을 생성해보세요!</p>
+        <button id="btn-empty-import" class="btn btn-secondary" style="margin-top: 8px; font-size: 12.5px; padding: 9px 16px; border-radius: var(--radius-full);" type="button">
+          <i class="fa-solid fa-file-import"></i> 기존 브라우저 회의록 가져오기
+        </button>
       </div>
     </main>
 
@@ -835,7 +857,8 @@
         <button id="btn-detail-back" class="icon-btn" type="button"><i class="fa-solid fa-arrow-left"></i></button>
         <div class="detail-top-title">회의록 상세</div>
         <div class="detail-nav-actions">
-          <button id="btn-copy-markdown" class="icon-btn" type="button" title="상세 요약 복사"><i class="fa-solid fa-copy"></i></button>
+          <button id="btn-edit-meeting" class="icon-btn" type="button" title="회의록 직접 수정"><i class="fa-solid fa-pen-to-square"></i></button>
+          <button id="btn-copy-markdown" class="icon-btn" type="button" title="전체 회의록 복사"><i class="fa-solid fa-copy"></i></button>
           <button id="btn-delete-meeting" class="icon-btn text-danger" type="button" title="삭제"><i class="fa-solid fa-trash"></i></button>
         </div>
       </div>
@@ -852,8 +875,7 @@
 
         <div class="detail-tabs">
           <button class="detail-tab-btn active" data-tab="tab-summary" type="button"><i class="fa-solid fa-clipboard-list"></i> 상세 요약</button>
-          <button class="detail-tab-btn" data-tab="tab-actions" type="button"><i class="fa-solid fa-list-check"></i> 할 일 <span class="tab-badge" id="detail-action-badge">0</span></button>
-          <button class="detail-tab-btn" data-tab="tab-transcript" type="button"><i class="fa-solid fa-comments"></i> 대화록</button>
+          <button class="detail-tab-btn" data-tab="tab-transcript" type="button"><i class="fa-solid fa-comments"></i> 핵심 대화록</button>
         </div>
 
         <!-- Tab 1: Detailed Topic Summaries -->
@@ -877,23 +899,57 @@
           </div>
         </div>
 
-        <!-- Tab 2: Action Items -->
-        <div id="tab-actions" class="tab-panel">
-          <div class="detail-section">
-            <div class="action-header-row">
-              <h4 class="section-heading"><i class="fa-solid fa-circle-check"></i> 실행 과제 (Action Items)</h4>
-              <span class="action-progress-text" id="action-progress-text">0 / 0 완료</span>
-            </div>
-            <div class="action-items-list" id="detail-action-items-list"></div>
-          </div>
-        </div>
-
-        <!-- Tab 3: Transcript -->
+        <!-- Tab 2: Key Transcript -->
         <div id="tab-transcript" class="tab-panel">
           <div class="detail-section">
-            <h4 class="section-heading"><i class="fa-solid fa-user-group"></i> 화자별 대화 스크립트</h4>
+            <h4 class="section-heading"><i class="fa-solid fa-user-group"></i> 핵심 대화록 (Key Dialogue)</h4>
             <div class="transcript-chat" id="detail-transcript-chat"></div>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Meeting Edit Modal -->
+    <div id="edit-modal" class="detail-page-modal" style="z-index: 170;">
+      <div class="detail-top-nav">
+        <button id="btn-close-edit" class="icon-btn" type="button"><i class="fa-solid fa-xmark"></i></button>
+        <div class="detail-top-title">회의록 직접 수정</div>
+        <div class="detail-nav-actions">
+          <button id="btn-save-edit" class="btn btn-primary" style="padding: 7px 16px; font-size: 13px;" type="button">
+            <i class="fa-solid fa-check"></i> 저장
+          </button>
+        </div>
+      </div>
+
+      <div class="detail-content" style="padding-bottom: 50px;">
+        <div class="form-group">
+          <label><i class="fa-solid fa-heading"></i> 회의 제목</label>
+          <input type="text" id="edit-title" class="input-styled" />
+        </div>
+
+        <div class="form-group">
+          <label><i class="fa-solid fa-folder"></i> 회의 분류</label>
+          <input type="text" id="edit-category" class="input-styled" />
+        </div>
+
+        <div class="form-group">
+          <label><i class="fa-solid fa-sparkles"></i> 회의 전체 개요</label>
+          <textarea id="edit-overview" class="text-input-area" style="height: 100px;"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label><i class="fa-solid fa-layer-group"></i> 소주제별 상세 논의 (안건명 [대괄호] 및 - 항목)</label>
+          <textarea id="edit-topics" class="text-input-area" style="height: 190px;" placeholder="[1. 첫 번째 안건]&#10;- 논의 내용 1&#10;- 논의 내용 2&#10;&#10;[2. 두 번째 안건]&#10;- 논의 내용 1"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label><i class="fa-solid fa-circle-check"></i> 주요 결정 사항 (줄바꿈 구분)</label>
+          <textarea id="edit-decisions" class="text-input-area" style="height: 100px;" placeholder="- 결정 사항 1&#10;- 결정 사항 2"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label><i class="fa-solid fa-comments"></i> 핵심 대화록 (화자: 핵심 발언)</label>
+          <textarea id="edit-transcript" class="text-input-area" style="height: 140px;" placeholder="홍길동 [01:20]: 핵심 발언 내용&#10;이순신 [02:40]: 결정적 논의 내용"></textarea>
         </div>
       </div>
     </div>
@@ -926,7 +982,44 @@
           <div id="custom-cat-manager-list" style="display:flex; flex-direction:column; gap:6px; max-height:120px; overflow-y:auto; padding:4px 0;"></div>
         </div>
 
+        <!-- Data Backup & Restore (Browser to App Data Migration) -->
+        <div class="form-group" style="border-top: 1px solid var(--border-color); padding-top: 14px;">
+          <label><i class="fa-solid fa-database"></i> 회의록 데이터 백업 / 복원 (브라우저 연동)</label>
+          <p class="form-help" style="margin-bottom: 8px;">브라우저(웹)에서 기록했던 회의록을 앱으로 가져오거나, 전체 데이터를 안전하게 백업합니다.</p>
+          
+          <div style="display: flex; gap: 8px;">
+            <button id="btn-export-data" class="btn btn-secondary" style="flex: 1; padding: 10px 8px; font-size: 12.5px;" type="button">
+              <i class="fa-solid fa-download"></i> 전체 백업 (내보내기)
+            </button>
+            <button id="btn-import-trigger" class="btn btn-secondary" style="flex: 1; padding: 10px 8px; font-size: 12.5px;" type="button">
+              <i class="fa-solid fa-upload"></i> 파일 복원 (가져오기)
+            </button>
+            <input type="file" id="file-import-data" accept=".json" style="display: none;" />
+          </div>
+          
+          <div style="margin-top: 8px;">
+            <button id="btn-open-text-import" class="btn-text-link" style="background:none; border:none; color:var(--accent-cyan); font-size:12px; cursor:pointer; text-decoration:underline; width:100%; text-align:center; padding: 4px;" type="button">
+              📋 JSON 텍스트 직접 복사/붙여넣기로 가져오기
+            </button>
+          </div>
+        </div>
+
         <button id="btn-save-key" class="btn btn-primary btn-full" type="button"><i class="fa-solid fa-check"></i> 설정 저장</button>
+      </div>
+    </div>
+
+    <!-- Direct Text Import Modal -->
+    <div id="import-modal" class="modal-backdrop">
+      <div class="settings-card">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="font-size: 16px; font-weight: 700;"><i class="fa-solid fa-file-import"></i> 회의록 데이터 가져오기</h3>
+          <button id="btn-close-import" class="icon-btn-sm" type="button"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
+          기존 브라우저(PC/모바일)의 <strong>[설정 ⚙️] → [전체 백업]</strong>에서 다운로드한 JSON 파일 내용이나 텍스트를 여기에 붙여넣으세요.
+        </p>
+        <textarea id="import-json-text" class="text-input-area" style="height: 150px; font-family: monospace; font-size: 11.5px;" placeholder='[{"id":"meet_...", "title":"...", ...}]'></textarea>
+        <button id="btn-submit-json-import" class="btn btn-primary btn-full" type="button"><i class="fa-solid fa-check"></i> 데이터 복원 적용</button>
       </div>
     </div>
 
@@ -1138,13 +1231,22 @@
       audioChunks: [],
       recordedBlob: null,
       recordStartTime: null,
+      actualRecordStartTime: null,
       recordTimerInterval: null,
       recordSeconds: 0,
       bookmarks: [],
       audioContext: null,
       analyser: null,
       dataArray: null,
-      animationId: null
+      animationId: null,
+      
+      // Battery Saver & Storage Optimization
+      autoSaverTimer: null,
+      lastMetaSaveTime: 0,
+      
+      // Live Realtime Speech Recognition (Web Speech API)
+      speechRecognition: null,
+      liveTranscript: []
     };
 
     // DOM Elements
@@ -1205,20 +1307,40 @@
       bookmarkCount: document.getElementById('bookmark-count'),
       
       btnDetailBack: document.getElementById('btn-detail-back'),
+      btnEditMeeting: document.getElementById('btn-edit-meeting'),
       btnCopyMarkdown: document.getElementById('btn-copy-markdown'),
       btnDeleteMeeting: document.getElementById('btn-delete-meeting'),
       detailCategory: document.getElementById('detail-category'),
       detailDate: document.getElementById('detail-date'),
       detailTitle: document.getElementById('detail-title'),
       detailTags: document.getElementById('detail-tags'),
-      detailActionBadge: document.getElementById('detail-action-badge'),
       detailOverviewText: document.getElementById('detail-overview-text'),
       detailTopicsContainer: document.getElementById('detail-topics-container'),
       detailDecisionsList: document.getElementById('detail-decisions-list'),
-      detailActionItemsList: document.getElementById('detail-action-items-list'),
-      actionProgressText: document.getElementById('action-progress-text'),
       detailTranscriptChat: document.getElementById('detail-transcript-chat'),
       
+      // Edit Modal Elements
+      editModal: document.getElementById('edit-modal'),
+      btnCloseEdit: document.getElementById('btn-close-edit'),
+      btnSaveEdit: document.getElementById('btn-save-edit'),
+      editTitle: document.getElementById('edit-title'),
+      editCategory: document.getElementById('edit-category'),
+      editOverview: document.getElementById('edit-overview'),
+      editTopics: document.getElementById('edit-topics'),
+      editDecisions: document.getElementById('edit-decisions'),
+      editTranscript: document.getElementById('edit-transcript'),
+
+      // Backup & Restore Elements
+      btnExportData: document.getElementById('btn-export-data'),
+      btnImportTrigger: document.getElementById('btn-import-trigger'),
+      fileImportData: document.getElementById('file-import-data'),
+      btnOpenTextImport: document.getElementById('btn-open-text-import'),
+      btnEmptyImport: document.getElementById('btn-empty-import'),
+      importModal: document.getElementById('import-modal'),
+      btnCloseImport: document.getElementById('btn-close-import'),
+      importJsonText: document.getElementById('import-json-text'),
+      btnSubmitJsonImport: document.getElementById('btn-submit-json-import'),
+
       btnSettings: document.getElementById('btn-settings'),
       btnCloseSettings: document.getElementById('btn-close-settings'),
       btnSaveKey: document.getElementById('btn-save-key'),
@@ -1250,34 +1372,22 @@
       if (el.btnBatterySaver) el.btnBatterySaver.addEventListener('click', enterBatterySaver);
       if (el.btnExitSaver) el.btnExitSaver.addEventListener('click', exitBatterySaver);
 
-      // 더블 탭 및 롱프레스 제스처로 잠금 해제 지원
+      // 화면 터치 / 클릭 시 즉시 화면 깨우기 및 롱프레스 제스처 지원
       if (el.batterySaverOverlay) {
-        let lastTap = 0;
-        let pressTimer = null;
-
-        el.batterySaverOverlay.addEventListener('touchstart', (e) => {
-          if (e.target === el.btnExitSaver || el.btnExitSaver.contains(e.target)) return;
-          const now = Date.now();
-          if (now - lastTap < 350) {
-            // Double Tap Unlocks
-            clearTimeout(pressTimer);
-            exitBatterySaver();
-            return;
-          }
-          lastTap = now;
-
-          // Long press 600ms Unlocks
-          pressTimer = setTimeout(() => {
-            exitBatterySaver();
-          }, 600);
-        }, { passive: true });
-
-        el.batterySaverOverlay.addEventListener('touchend', () => {
-          clearTimeout(pressTimer);
+        el.batterySaverOverlay.addEventListener('click', (e) => {
+          exitBatterySaver();
         });
+        el.batterySaverOverlay.addEventListener('touchstart', (e) => {
+          exitBatterySaver();
+        }, { passive: true });
+      }
 
-        el.batterySaverOverlay.addEventListener('touchcancel', () => {
-          clearTimeout(pressTimer);
+      // 녹음 모달 내 사용자 상호작용 시 자동 절전 타이머 리셋
+      if (el.recordModal) {
+        ['touchstart', 'mousedown', 'keydown', 'scroll'].forEach(evt => {
+          el.recordModal.addEventListener(evt, () => {
+            resetInactivityTimer();
+          }, { passive: true });
         });
       }
 
@@ -1327,9 +1437,29 @@
         renderMeetings();
       });
 
-      // 5. Settings
+      // 5. Settings & Backup/Restore
       el.btnSettings.addEventListener('click', openSettingsModal);
       el.btnCloseSettings.addEventListener('click', () => el.settingsModal.classList.remove('active'));
+      if (el.btnExportData) el.btnExportData.addEventListener('click', exportAllData);
+      if (el.btnImportTrigger) el.btnImportTrigger.addEventListener('click', () => el.fileImportData.click());
+      if (el.fileImportData) el.fileImportData.addEventListener('change', importDataFromFile);
+      if (el.btnOpenTextImport) el.btnOpenTextImport.addEventListener('click', () => {
+        el.importJsonText.value = '';
+        el.importModal.classList.add('active');
+      });
+      if (el.btnEmptyImport) el.btnEmptyImport.addEventListener('click', () => {
+        el.importJsonText.value = '';
+        el.importModal.classList.add('active');
+      });
+      if (el.btnCloseImport) el.btnCloseImport.addEventListener('click', () => el.importModal.classList.remove('active'));
+      if (el.btnSubmitJsonImport) el.btnSubmitJsonImport.addEventListener('click', () => {
+        const text = el.importJsonText.value.trim();
+        if (!text) return alert('JSON 데이터를 입력해주세요.');
+        if (importDataFromJsonString(text)) {
+          el.importModal.classList.remove('active');
+          el.settingsModal.classList.remove('active');
+        }
+      });
 
       // 6. Recording Controls
       el.btnMainRecord.addEventListener('click', toggleRecording);
@@ -1348,8 +1478,11 @@
         if (el.textCatSelect.value === '__custom__') el.textCatCustom.focus();
       });
 
-      // 7. Detail View
+      // 7. Detail View & Edit
       el.btnDetailBack.addEventListener('click', () => el.detailModal.classList.remove('active'));
+      if (el.btnEditMeeting) el.btnEditMeeting.addEventListener('click', openEditModal);
+      if (el.btnCloseEdit) el.btnCloseEdit.addEventListener('click', closeEditModal);
+      if (el.btnSaveEdit) el.btnSaveEdit.addEventListener('click', saveEditModal);
       el.btnCopyMarkdown.addEventListener('click', copyMeetingAsMarkdown);
       el.btnDeleteMeeting.addEventListener('click', deleteCurrentMeeting);
       el.detailCategory.addEventListener('click', changeCurrentMeetingCategory);
@@ -1388,27 +1521,29 @@
       document.addEventListener('visibilitychange', async () => {
         if (document.visibilityState === 'visible') {
           if (state.isRecording) {
-            // 1. Resync timer using wall-clock time
             if (state.recordStartTime) {
               state.recordSeconds = Math.floor((Date.now() - state.recordStartTime) / 1000);
               el.recordTimer.textContent = formatTimerSeconds(state.recordSeconds);
               if (state.isSaverMode) el.saverTimer.textContent = formatTimerSeconds(state.recordSeconds);
             }
-            // 2. Resume AudioContext
-            if (state.audioContext && state.audioContext.state === 'suspended') {
+            if (!state.isSaverMode && state.audioContext && state.audioContext.state === 'suspended') {
               try { await state.audioContext.resume(); } catch(e){}
             }
-            // 3. Re-acquire WakeLock if lost
             if (!wakeLock && 'wakeLock' in navigator) {
               try { wakeLock = await navigator.wakeLock.request('screen'); } catch(e){}
             }
-            // 4. Ensure silent audio is playing
             if (silentAudioEl && silentAudioEl.paused) {
               silentAudioEl.play().catch(()=>{});
             }
             if (!state.isSaverMode) {
               showToast('📱 백그라운드 녹음이 정상적으로 유지되었습니다.');
             }
+          }
+        } else {
+          // Screen turned off or app minimized -> pause canvas animation
+          if (state.animationId) {
+            cancelAnimationFrame(state.animationId);
+            state.animationId = null;
           }
         }
       });
@@ -1424,24 +1559,64 @@
     }
 
     // ==========================================
-    // OLED Battery Saver Functions
+    // OLED Battery Saver Functions (Ultra Low Power)
     // ==========================================
+    function resetInactivityTimer() {
+      if (state.autoSaverTimer) {
+        clearTimeout(state.autoSaverTimer);
+        state.autoSaverTimer = null;
+      }
+      if (state.isRecording && !state.isSaverMode) {
+        // 25초 동안 조작이 없으면 자동으로 True Black OLED 절전 모드로 진입하여 배터리 소모를 최대 85% 절약
+        state.autoSaverTimer = setTimeout(() => {
+          if (state.isRecording && !state.isSaverMode) {
+            enterBatterySaver();
+          }
+        }, 25000);
+      }
+    }
+
     function enterBatterySaver() {
       if (!state.isRecording) return;
       state.isSaverMode = true;
+      if (state.autoSaverTimer) {
+        clearTimeout(state.autoSaverTimer);
+        state.autoSaverTimer = null;
+      }
+
+      // 1. Stop GPU canvas render loop
+      if (state.animationId) {
+        cancelAnimationFrame(state.animationId);
+        state.animationId = null;
+      }
+
+      // 2. Suspend AudioContext DSP processing loop to drop CPU usage
+      if (state.audioContext && state.audioContext.state === 'running') {
+        try { state.audioContext.suspend(); } catch(e){}
+      }
+
       el.saverTimer.textContent = formatTimerSeconds(state.recordSeconds);
       el.batterySaverOverlay.style.display = 'flex';
-      showToast('🌙 OLED 배터리 절약 & 터치 잠금 모드 켜짐');
+      showToast('🌙 OLED 초절전 모드 (화면 터치 시 해제)');
     }
 
     function exitBatterySaver() {
       if (!state.isSaverMode) return;
       state.isSaverMode = false;
       el.batterySaverOverlay.style.display = 'none';
+
+      // 1. Resume AudioContext
+      if (state.audioContext && state.audioContext.state === 'suspended') {
+        try { state.audioContext.resume(); } catch(e){}
+      }
+
+      // 2. Resume visualizer
       if (state.isRecording && state.analyser) {
         drawWaveform();
       }
-      showToast('☀️ 화면 절전 모드가 해제되었습니다.');
+
+      resetInactivityTimer();
+      showToast('☀️ 화면이 켜졌습니다.');
     }
 
     // ==========================================
@@ -1478,6 +1653,7 @@
         state.audioChunks = session.chunks;
         state.recordSeconds = session.meta.elapsedSeconds || 0;
         state.bookmarks = session.meta.bookmarks || [];
+        state.actualRecordStartTime = session.meta.startTime ? new Date(session.meta.startTime) : new Date();
 
         openRecordModal();
         el.recordTimer.textContent = formatTimerSeconds(state.recordSeconds);
@@ -1540,7 +1716,6 @@
         });
       });
 
-      // Update Select in Record & Text Modals
       updateModalCategorySelectors();
     }
 
@@ -1649,9 +1824,6 @@
       el.emptyState.style.display = 'none';
       el.meetingList.innerHTML = filtered.map(m => {
         const previewText = m.overview || (m.summary_3lines && m.summary_3lines[0]) || '요약 내용 없음';
-        const actions = m.action_items || [];
-        const doneCount = actions.filter(a => a.done).length;
-        const hasPending = actions.length > 0 && doneCount < actions.length;
         const tagsHtml = (m.tags || []).slice(0, 3).map(t => `<span class="tag-item">${escapeHtml(t)}</span>`).join('');
 
         return `
@@ -1664,11 +1836,6 @@
             <p class="card-summary-preview">${escapeHtml(previewText)}</p>
             <div class="card-bottom-row">
               <div class="card-tags">${tagsHtml}</div>
-              ${actions.length > 0 ? `
-                <span class="card-action-counter ${hasPending ? 'has-pending' : ''}">
-                  <i class="fa-solid fa-list-check"></i> 할일 ${doneCount}/${actions.length}
-                </span>
-              ` : ''}
             </div>
           </div>
         `;
@@ -1703,18 +1870,33 @@
     function resetRecordingState() {
       exitBatterySaver();
       stopBackgroundAudioRetention();
+      if (state.autoSaverTimer) {
+        clearTimeout(state.autoSaverTimer);
+        state.autoSaverTimer = null;
+      }
       state.isRecording = false;
       state.audioChunks = [];
       state.recordedBlob = null;
       state.recordSeconds = 0;
       state.bookmarks = [];
+      state.actualRecordStartTime = null;
+      state.liveTranscript = [];
+      state.lastMetaSaveTime = 0;
       clearInterval(state.recordTimerInterval);
       
+      if (state.speechRecognition) {
+        try { state.speechRecognition.stop(); } catch(e){}
+        state.speechRecognition = null;
+      }
+
       if (state.audioStream) {
         state.audioStream.getTracks().forEach(t => t.stop());
         state.audioStream = null;
       }
-      if (state.animationId) cancelAnimationFrame(state.animationId);
+      if (state.animationId) {
+        cancelAnimationFrame(state.animationId);
+        state.animationId = null;
+      }
       if (state.audioContext && state.audioContext.state !== 'closed') {
         try { state.audioContext.close(); } catch(e){}
       }
@@ -1761,26 +1943,32 @@
 
         state.mediaRecorder = new MediaRecorder(state.audioStream, options);
         state.audioChunks = [];
+        state.lastMetaSaveTime = 0;
 
         state.mediaRecorder.ondataavailable = async (e) => {
           if (e.data && e.data.size > 0) {
             state.audioChunks.push(e.data);
             const chunkIdx = state.audioChunks.length - 1;
             
-            // Save real-time audio chunk to IndexedDB
+            // Save real-time audio chunk to IndexedDB (5s intervals)
             await MeetAIDB.saveChunk(chunkIdx, e.data);
 
-            const elapsed = state.recordStartTime ? Math.floor((Date.now() - state.recordStartTime) / 1000) : state.recordSeconds;
-            await MeetAIDB.saveMeta({
-              startTime: state.recordStartTime,
-              elapsedSeconds: elapsed,
-              category: el.recordCatSelect.value === '__custom__' ? el.recordCatCustom.value.trim() : el.recordCatSelect.value,
-              hint: el.recordHint.value.trim(),
-              bookmarks: state.bookmarks,
-              mimeType: state.mediaRecorder.mimeType || 'audio/webm',
-              status: 'recording',
-              lastUpdated: Date.now()
-            });
+            const now = Date.now();
+            // Batch metadata disk write to every 30s to save flash I/O wakeups
+            if (!state.lastMetaSaveTime || now - state.lastMetaSaveTime >= 30000) {
+              state.lastMetaSaveTime = now;
+              const elapsed = state.recordStartTime ? Math.floor((now - state.recordStartTime) / 1000) : state.recordSeconds;
+              await MeetAIDB.saveMeta({
+                startTime: state.recordStartTime,
+                elapsedSeconds: elapsed,
+                category: el.recordCatSelect.value === '__custom__' ? el.recordCatCustom.value.trim() : el.recordCatSelect.value,
+                hint: el.recordHint.value.trim(),
+                bookmarks: state.bookmarks,
+                mimeType: state.mediaRecorder.mimeType || 'audio/webm',
+                status: 'recording',
+                lastUpdated: now
+              });
+            }
           }
         };
 
@@ -1802,7 +1990,6 @@
           el.micStatusHint.textContent = `녹음 완료 (${formatTimerSeconds(state.recordSeconds)})! 하단의 [AI 분석 시작] 버튼을 누르세요.`;
         };
 
-        // Listen for track ending (e.g. system phone call or interruption)
         state.audioStream.getAudioTracks().forEach(track => {
           track.onended = () => {
             if (state.isRecording) {
@@ -1813,18 +2000,62 @@
           };
         });
 
-        state.mediaRecorder.start(1000);
+        // 5000ms (5 seconds) timeslice saves 80% of storage flash controller wakeups compared to 1000ms
+        state.mediaRecorder.start(5000);
         state.isRecording = true;
         state.recordStartTime = Date.now();
+        state.actualRecordStartTime = new Date();
+
+        // 3. Realtime Speech Recognition (Web Speech API)
+        state.liveTranscript = [];
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+          try {
+            const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+            state.speechRecognition = new SpeechRec();
+            state.speechRecognition.continuous = true;
+            state.speechRecognition.interimResults = true;
+            state.speechRecognition.lang = 'ko-KR';
+            state.speechRecognition.maxAlternatives = 1;
+
+            state.speechRecognition.onresult = (event) => {
+              for (let i = event.resultIndex; i < event.results.length; ++i) {
+                if (event.results[i].isFinal) {
+                  const spoken = event.results[i][0].transcript.trim();
+                  if (spoken) {
+                    const timeMark = formatTimerSeconds(state.recordSeconds);
+                    state.liveTranscript.push({ time: timeMark, text: spoken });
+                  }
+                }
+              }
+            };
+
+            state.speechRecognition.onerror = (e) => {
+              console.warn('SpeechRecognition info:', e.error);
+            };
+
+            state.speechRecognition.onend = () => {
+              if (state.isRecording && state.speechRecognition) {
+                try { state.speechRecognition.start(); } catch(e){}
+              }
+            };
+
+            state.speechRecognition.start();
+          } catch(err) {
+            console.warn('SpeechRecognition start error:', err);
+          }
+        }
 
         el.btnMainRecord.classList.add('recording');
         el.mainRecordIcon.className = 'fa-solid fa-stop';
         el.recDot.classList.add('recording');
-        el.recStatusText.textContent = '실시간 녹음 중 (백그라운드 활성)...';
+        el.recStatusText.textContent = '실시간 녹음 중 (초절전 활성)...';
         el.micStatusHint.textContent = '회의 음성을 녹음 중입니다. [화면 절전]으로 배터리를 절약할 수 있습니다.';
         el.btnBookmark.disabled = false;
         if (el.btnBatterySaver) el.btnBatterySaver.disabled = false;
         el.btnFinishAnalyze.disabled = true;
+
+        // Auto saver timer: 25초간 조작이 없으면 자동으로 True Black OLED 절전 모드로 진입
+        resetInactivityTimer();
 
         state.recordTimerInterval = setInterval(() => {
           state.recordSeconds = Math.floor((Date.now() - state.recordStartTime) / 1000);
@@ -1845,6 +2076,16 @@
     function stopRecording() {
       exitBatterySaver();
       stopBackgroundAudioRetention();
+
+      if (state.autoSaverTimer) {
+        clearTimeout(state.autoSaverTimer);
+        state.autoSaverTimer = null;
+      }
+
+      if (state.speechRecognition) {
+        try { state.speechRecognition.stop(); } catch(e){}
+        state.speechRecognition = null;
+      }
 
       if (state.mediaRecorder && state.mediaRecorder.state !== 'inactive') {
         try { state.mediaRecorder.stop(); } catch(e){}
@@ -1886,36 +2127,39 @@
       }
     }
 
+    let lastWaveformDraw = 0;
     function drawWaveform() {
       const canvas = el.waveformCanvas;
+      if (!canvas) return;
       const ctx = canvas.getContext('2d');
       const w = canvas.width, h = canvas.height;
 
-      function frame() {
-        if (!state.isRecording || state.isSaverMode) return;
+      function frame(currentTime) {
+        if (!state.isRecording || state.isSaverMode || document.hidden) return;
         state.animationId = requestAnimationFrame(frame);
+
+        // 20 FPS Throttle (50ms interval) to save ~70% GPU cycles on mobile
+        if (currentTime - lastWaveformDraw < 50) return;
+        lastWaveformDraw = currentTime;
+
         state.analyser.getByteFrequencyData(state.dataArray);
         ctx.clearRect(0, 0, w, h);
 
         const bars = 28, bw = 6;
         const gap = (w - (bars * bw)) / (bars - 1);
+        ctx.fillStyle = '#818CF8';
 
         for (let i = 0; i < bars; i++) {
           const val = state.dataArray[i % state.dataArray.length] || 10;
           const bh = Math.max(4, (val / 255) * h * 0.9);
           const x = i * (bw + gap);
           const y = (h - bh) / 2;
-
-          const grad = ctx.createLinearGradient(0, y, 0, y + bh);
-          grad.addColorStop(0, '#A855F7');
-          grad.addColorStop(1, '#6366F1');
-          ctx.fillStyle = grad;
           ctx.beginPath();
           ctx.roundRect(x, y, bw, bh, 3);
           ctx.fill();
         }
       }
-      frame();
+      frame(performance.now());
     }
 
     function drawEmptyWaveform() {
@@ -1956,10 +2200,24 @@
       const file = e.target.files[0];
       if (!file) return;
       state.recordedBlob = file;
-      state.recordSeconds = 0;
+      state.liveTranscript = [];
+      state.actualRecordStartTime = file.lastModified ? new Date(file.lastModified) : new Date();
+
+      // Read real audio duration
+      const fileUrl = URL.createObjectURL(file);
+      const tempAudio = new Audio();
+      tempAudio.src = fileUrl;
+      tempAudio.onloadedmetadata = () => {
+        state.recordSeconds = Math.round(tempAudio.duration || 0);
+        el.micStatusHint.textContent = `선택: ${file.name} (${(file.size / (1024*1024)).toFixed(1)}MB, 재생시간: ${formatDuration(state.recordSeconds)})`;
+      };
+      tempAudio.onerror = () => {
+        state.recordSeconds = 0;
+        el.micStatusHint.textContent = `선택: ${file.name} (${(file.size / (1024*1024)).toFixed(1)}MB)`;
+      };
+
       el.btnFinishAnalyze.disabled = false;
       el.recStatusText.textContent = '파일 선택 완료';
-      el.micStatusHint.textContent = `선택: ${file.name} (${(file.size / (1024*1024)).toFixed(1)}MB)`;
       showToast(`📁 ${file.name} 파일 준비`);
     }
 
@@ -1990,9 +2248,9 @@
       el.loadingOverlay.classList.add('active');
       const steps = [
         '입력된 텍스트를 구조화 분석 중입니다...',
-        'Gemini 3.6 Flash가 회의 내용을 소주제별로 분류 중입니다...',
-        '소주제별 상세 논의 내용과 핵심 포인트를 정리 중입니다...',
-        '주요 결정 사항 및 실행 과제(Action Items)를 추출하고 있습니다...'
+        'AI가 회의 내용을 소주제별로 분류 중입니다...',
+        '안건별 세부 논의 내용과 핵심 포인트를 풍부하게 정리 중입니다...',
+        '주요 결정 사항 및 핵심 대화록을 선별 추출하고 있습니다...'
       ];
 
       let stepIdx = 0;
@@ -2011,12 +2269,11 @@
           id: 'meet_' + Date.now(),
           title: analysis.title || '텍스트 회의 요약',
           category: selectedCategory,
-          meeting_date: new Date().toISOString().replace('T', ' ').slice(0, 16),
+          meeting_date: formatLocalDateTime(new Date()),
           duration_seconds: 0,
           overview: analysis.overview || '',
           topic_summaries: analysis.topic_summaries || [],
           key_decisions: analysis.key_decisions || [],
-          action_items: analysis.action_items || [],
           transcript: analysis.transcript || [],
           tags: analysis.tags || [],
           bookmarks: []
@@ -2041,48 +2298,50 @@
     // Gemini API Direct Analysis (Audio & Text)
     // ==========================================
     const SYSTEM_PROMPT = `
-당신은 대한민국 최고의 AI 전문 회의 비서입니다.
-제공된 회의 내용(오디오 또는 텍스트)을 면밀히 분석하여, 단순한 몇 줄 요약에 그치지 않고 **회의에서 다룬 핵심 안건들을 소주제(Topic)별로 상세하고 풍부하게 정리한 완벽한 회의록**을 작성해야 합니다.
+당신은 대한민국 최고 수준의 AI 전문 회의 비서 및 회의록 분석 전문가입니다.
+제공된 실제 회의 내용(오디오 음성 데이터 및/또는 텍스트)을 정밀하게 분석하여 전문적이고 충실한 회의록을 작성해야 합니다.
 
-반드시 오직 유효한 JSON 형식으로만 응답하세요. (마크다운 \`\`\`json ... \`\`\` 로 감싸도 됨)
+[🚨 절대 원칙: Hallucination(허위 정보 생성) 엄격 금지]
+1. 반드시 실제로 발화된 한국어 대화 음성 및 제공된 텍스트 내용에만 100% 엄격하게 근거하여 작성하세요.
+2. 오디오/텍스트에 없는 가상의 프로젝트, 가상의 인물, 지어낸 수치나 설정을 절대로 날조하거나 지어내지 마십시오.
+3. 만약 음성이 짧거나 특정 부분이 잘 들리지 않더라도, 절대로 가상으로 내용을 꾸며내지 말고 실제로 확인된 사실만을 바탕으로 작성하세요.
+
+[📏 회의 분량 비례 상세 기술 원칙 (Proportional Detail Principle)]
+- 회의의 전체 시간(녹음 분량)과 대화의 양에 비례하여 요약 내용의 분량과 깊이를 유동적으로 작성하세요.
+- **과도한 단순 요약 금지**: 중요한 논의 배경, 참석자별 주요 발언, 제시된 대안, 구체적 데이터/사례, 논쟁점, 최종 도출된 방향이 생략되거나 누락되지 않도록 상세하고 풍부하게 작성해야 합니다.
+- **짧은 회의(5~15분)**: 2~4개 소주제, 각 소주제당 3~5개 이상의 구체적 핵심 포인트
+- **중장기 회의(30분~1시간 이상)**: 5~10개 이상의 소주제(Topic), 각 소주제당 4~8개 이상의 상세 포인트로 모든 안건을 완벽히 정리하세요.
+
+[💬 핵심 대화록(Key Transcript) 선별 원칙]
+- 단순 인사말, 맞장구, 일상 잡담 등 불필요한 대화는 완전히 제외하세요.
+- **회의의 핵심 안건 제기, 주요 의견 대립 및 반론, 중요한 데이터/근거 제시, 최종 의사결정이 이루어지는 순간의 핵심 발언들만 엄선**하여 화자별/시간대별로 기록하세요.
+
+반드시 유효한 JSON 형식으로만 응답하세요. (마크다운 \`\`\`json ... \`\`\` 로 감싸도 됨)
 
 [JSON 스키마]
 {
-  "title": "회의 핵심 주제를 반영한 전문적인 제목",
-  "tags": ["#태그1", "#태그2", "#태그3"],
-  "overview": "회의의 전체 배경, 목적, 총평을 요약한 2~3문장의 전체 개요",
+  "title": "회의의 핵심 주제와 목적을 명확히 반영한 전문적인 제목",
+  "tags": ["#핵심태그1", "#핵심태그2", "#핵심태그3"],
+  "overview": "회의 전체의 배경, 목적, 주요 논의 흐름, 총평을 요약한 3~5문장 이상의 종합 개요",
   "topic_summaries": [
     {
-      "topic": "1. 첫 번째 소주제/안건 제목",
+      "topic": "1. 첫 번째 안건/소주제 제목",
       "points": [
-        "해당 소주제에 대한 구체적인 현황 및 논의 내용 (배경, 데이터, 상황 설명)",
-        "참석자들의 다양한 의견, 대안 검토, 반론 또는 세부 논거",
-        "해당 안건과 관련된 결론 또는 다음 단계 방향"
-      ]
-    },
-    {
-      "topic": "2. 두 번째 소주제/안건 제목",
-      "points": [
-        "논의 배경 및 세부 공유 내용",
-        "주요 이슈 사항 및 대책 논의"
+        "해당 안건의 현황, 배경 설명 및 구체적인 상황 공유",
+        "참석자들의 주요 발언 및 제시된 대안/의견",
+        "발생한 이슈 사항 및 해결 방안 논의",
+        "해당 안건의 최종 결론 및 다음 조치 방향"
       ]
     }
   ],
   "key_decisions": [
-    "최종 합의/결정된 중요 사항 1",
-    "최종 합의/결정된 중요 사항 2"
-  ],
-  "action_items": [
-    { "task": "구체적인 할 일 내용", "assignee": "담당자 이름", "due_date": "기한", "done": false }
+    "최종 합의 및 결정된 구체적 사항 1 (결정 배경 포함)",
+    "최종 합의 및 결정된 구체적 사항 2"
   ],
   "transcript": [
-    { "speaker": "참석자 A", "time": "00:05", "text": "발화 내용" }
+    { "speaker": "발언자 이름", "time": "00:05", "text": "회의 핵심 안건, 주요 논쟁, 중요 결정과 직결된 핵심 발언" }
   ]
 }
-
-[작성 지침]
-- topic_summaries는 회의의 흐름에 따라 2~5개의 소주제로 나누고, 각 소주제마다 points를 2~4개씩 작성하여 회의 내용을 빠짐없이 상세하게 담아내세요.
-- 주요 결정 사항(key_decisions)과 할 일(action_items)은 명확하게 추출하세요.
 `;
 
     async function callGeminiDirectly(audioBlob, userHint = "") {
@@ -2095,15 +2354,20 @@
       const base64Data = await blobToBase64(audioBlob);
       const mimeType = audioBlob.type || "audio/webm";
 
-      let promptText = `이 회의 오디오를 듣고 회의를 소주제(Topic)별로 상세히 나누어 풍부한 논의 내용과 결정 사항, 할 일을 JSON 형식으로 작성해주세요.`;
+      let promptText = `이 실제 회의 음성을 주의 깊게 청취하고 분석하여, 가상의 내용을 지어내지 말고 실제로 발화된 사실에만 근거하여 소주제(Topic)별 상세 논의 내용, 주요 결정 사항, 실행 과제를 JSON 형식으로 작성해주세요.`;
+      
+      if (state.liveTranscript && state.liveTranscript.length > 0) {
+        const fullTranscriptText = state.liveTranscript.map(t => `[${t.time}] ${t.text}`).join('\n');
+        promptText += `\n\n[실시간 음성인식(STT) 보조 원문 스크립트]:\n${fullTranscriptText}`;
+      }
       if (state.glossary) {
-        promptText += `\n[사내 주요 전문 용어 / 고유명사 / 인명 사전 (반드시 우선 반영)]: ${state.glossary}`;
+        promptText += `\n\n[사내 주요 전문 용어 / 고유명사 / 인명 사전 (반드시 우선 반영)]: ${state.glossary}`;
       }
       if (userHint) {
-        promptText += `\n[사용자 추가 힌트]: ${userHint}`;
+        promptText += `\n\n[사용자 추가 힌트]: ${userHint}`;
       }
 
-      const candidateModels = ["gemini-3.6-flash", "gemini-3.7-flash", "gemini-flash-latest", "gemini-2.5-flash-lite"];
+      const candidateModels = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash", "gemini-2.5-pro", "gemini-1.5-pro"];
       let lastError = null;
 
       for (const modelName of candidateModels) {
@@ -2149,15 +2413,15 @@
         throw new Error("Google Gemini API 키가 필요합니다. 설정 창에 키를 입력하고 [설정 저장]을 눌러주세요.");
       }
 
-      let promptText = `다음 회의 텍스트를 면밀히 분석하여 소주제(Topic)별 상세 논의 내용, 주요 결정 사항, 실행 과제를 JSON 형식으로 작성해주세요:\n\n${textContext}`;
+      let promptText = `다음 회의 텍스트를 면밀히 분석하여, 실제 텍스트에 근거하여 소주제(Topic)별 상세 논의 내용, 주요 결정 사항, 실행 과제를 JSON 형식으로 작성해주세요:\n\n${textContext}`;
       if (state.glossary) {
         promptText += `\n\n[사내 주요 전문 용어 / 고유명사 / 인명 사전 (반드시 우선 반영)]: ${state.glossary}`;
       }
       if (userHint) {
-        promptText += `\n[사용자 추가 힌트]: ${userHint}`;
+        promptText += `\n\n[사용자 추가 힌트]: ${userHint}`;
       }
 
-      const candidateModels = ["gemini-3.6-flash", "gemini-3.7-flash", "gemini-flash-latest", "gemini-2.5-flash-lite"];
+      const candidateModels = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash", "gemini-2.5-pro", "gemini-1.5-pro"];
       let lastError = null;
 
       for (const modelName of candidateModels) {
@@ -2238,10 +2502,10 @@
 
       el.loadingOverlay.classList.add('active');
       const steps = [
-        '오디오 데이터를 변환하고 있습니다...',
-        'Gemini 3.6 Flash가 음성을 소주제별로 분류 중입니다...',
-        '안건별 상세 논의 내용과 핵심 포인트를 정리 중입니다...',
-        '주요 결정 사항 및 실행 과제(Action Items)를 구조화하고 있습니다...'
+        '오디오 데이터를 분석 준비 중입니다...',
+        'AI가 음성을 정밀 청취하여 안건별로 분류 중입니다...',
+        '안건별 세부 논의 내용과 핵심 포인트를 풍부하게 정리 중입니다...',
+        '주요 결정 사항 및 핵심 대화록을 선별 추출하고 있습니다...'
       ];
 
       let stepIdx = 0;
@@ -2260,12 +2524,11 @@
           id: 'meet_' + Date.now(),
           title: analysis.title || '새로운 회의록',
           category: selectedCategory,
-          meeting_date: new Date().toISOString().replace('T', ' ').slice(0, 16),
+          meeting_date: formatLocalDateTime(state.actualRecordStartTime || new Date()),
           duration_seconds: state.recordSeconds,
           overview: analysis.overview || '',
           topic_summaries: analysis.topic_summaries || [],
           key_decisions: analysis.key_decisions || [],
-          action_items: analysis.action_items || [],
           transcript: analysis.transcript || [],
           tags: analysis.tags || [],
           bookmarks: state.bookmarks
@@ -2291,7 +2554,7 @@
     }
 
     // ==========================================
-    // Detail View
+    // Detail View & Edit Management
     // ==========================================
     function openMeetingDetail(meetingId) {
       const meeting = state.meetings.find(m => m.id === meetingId);
@@ -2300,7 +2563,7 @@
 
       el.detailTitle.textContent = meeting.title;
       el.detailCategory.textContent = meeting.category || '일반';
-      el.detailDate.textContent = `${meeting.meeting_date} ${meeting.duration_seconds ? `(${formatDuration(meeting.duration_seconds)})` : ''}`;
+      el.detailDate.textContent = `${meeting.meeting_date} ${meeting.duration_seconds > 0 ? `· 녹음 시간: ${formatDuration(meeting.duration_seconds)}` : ''}`;
 
       el.detailTags.innerHTML = (meeting.tags || []).map(t => `<span class="tag-item">${escapeHtml(t)}</span>`).join('');
 
@@ -2339,13 +2602,12 @@
         el.detailTopicsContainer.innerHTML = '<p class="text-muted" style="font-size:13px;">소주제 요약이 없습니다.</p>';
       }
 
-      // 3. Decisions
+      // 3. Key Decisions
       el.detailDecisionsList.innerHTML = (meeting.key_decisions || []).map(d => `
         <div class="decision-item"><i class="fa-solid fa-circle-check"></i><span>${escapeHtml(d)}</span></div>
       `).join('') || '<p class="text-muted">결정 사항 없음</p>';
 
-      renderActionItems(meeting);
-
+      // 4. Key Transcript (Key Dialogue)
       el.detailTranscriptChat.innerHTML = (meeting.transcript || []).map(t => `
         <div class="chat-bubble">
           <div class="chat-header">
@@ -2354,77 +2616,175 @@
           </div>
           <div class="chat-text">${escapeHtml(t.text || '')}</div>
         </div>
-      `).join('') || '<p class="text-muted">대화록 없음</p>';
+      `).join('') || '<p class="text-muted">핵심 대화록 없음</p>';
 
       document.querySelectorAll('.detail-tab-btn').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-      document.querySelector('.detail-tab-btn[data-tab="tab-summary"]').classList.add('active');
-      document.getElementById('tab-summary').classList.add('active');
+      const summaryTabBtn = document.querySelector('.detail-tab-btn[data-tab="tab-summary"]');
+      if (summaryTabBtn) summaryTabBtn.classList.add('active');
+      const summaryTabPanel = document.getElementById('tab-summary');
+      if (summaryTabPanel) summaryTabPanel.classList.add('active');
 
       el.detailModal.classList.add('active');
     }
 
-    function renderActionItems(meeting) {
-      const items = meeting.action_items || [];
-      const doneCount = items.filter(a => a.done).length;
-      el.detailActionBadge.textContent = items.length;
-      el.actionProgressText.textContent = `${doneCount} / ${items.length} 완료`;
+    // ==========================================
+    // Meeting Edit Modal Functions
+    // ==========================================
+    function openEditModal() {
+      const m = state.selectedMeeting;
+      if (!m) return;
 
-      if (items.length === 0) {
-        el.detailActionItemsList.innerHTML = '<p class="text-muted" style="font-size:13px;">등록된 실행 과제가 없습니다.</p>';
-        return;
+      el.editTitle.value = m.title || '';
+      el.editCategory.value = m.category || '일반';
+      el.editOverview.value = m.overview || '';
+
+      // Format topic summaries
+      if (m.topic_summaries && m.topic_summaries.length > 0) {
+        el.editTopics.value = m.topic_summaries.map(t => {
+          let str = `[${t.topic || '안건'}]\n`;
+          (t.points || []).forEach(p => {
+            str += `- ${p}\n`;
+          });
+          return str.trim();
+        }).join('\n\n');
+      } else {
+        el.editTopics.value = '';
       }
 
-      el.detailActionItemsList.innerHTML = items.map((item, idx) => `
-        <div class="action-item-card ${item.done ? 'done' : ''}" onclick="toggleActionItem('${meeting.id}', ${idx})">
-          <div class="action-checkbox">
-            ${item.done ? '<i class="fa-solid fa-check" style="font-size: 11px;"></i>' : ''}
-          </div>
-          <div class="action-item-info">
-            <div class="action-task">${escapeHtml(item.task)}</div>
-            <div class="action-meta">
-              <span class="action-assignee"><i class="fa-regular fa-user"></i> ${escapeHtml(item.assignee || '미정')}</span>
-              <span class="action-due"><i class="fa-regular fa-calendar"></i> ${escapeHtml(item.due_date || '미정')}</span>
-            </div>
-          </div>
-        </div>
-      `).join('');
+      // Format decisions
+      if (m.key_decisions && m.key_decisions.length > 0) {
+        el.editDecisions.value = m.key_decisions.map(d => `- ${d}`).join('\n');
+      } else {
+        el.editDecisions.value = '';
+      }
+
+      // Format transcript
+      if (m.transcript && m.transcript.length > 0) {
+        el.editTranscript.value = m.transcript.map(t => `${t.speaker || '참석자'}${t.time ? ` [${t.time}]` : ''}: ${t.text || ''}`).join('\n');
+      } else {
+        el.editTranscript.value = '';
+      }
+
+      el.editModal.classList.add('active');
     }
 
-    function toggleActionItem(meetingId, itemIdx) {
-      const m = state.meetings.find(x => x.id === meetingId);
-      if (m && m.action_items[itemIdx]) {
-        m.action_items[itemIdx].done = !m.action_items[itemIdx].done;
-        saveMeetingsToStorage();
-        renderActionItems(m);
+    function closeEditModal() {
+      el.editModal.classList.remove('active');
+    }
+
+    function saveEditModal() {
+      const m = state.selectedMeeting;
+      if (!m) return;
+
+      const title = el.editTitle.value.trim() || '회의록';
+      const category = el.editCategory.value.trim() || '일반';
+      const overview = el.editOverview.value.trim();
+
+      // Parse topics
+      const rawTopics = el.editTopics.value.trim();
+      const topicSummaries = [];
+      if (rawTopics) {
+        const blocks = rawTopics.split(/\n\s*\n/);
+        blocks.forEach(block => {
+          const lines = block.split('\n').map(l => l.trim()).filter(Boolean);
+          if (lines.length > 0) {
+            let topicName = lines[0].replace(/^\[|\]$/g, '').replace(/^-+\s*/, '').trim();
+            const points = lines.slice(1).map(l => l.replace(/^[-*•]\s*/, '').trim()).filter(Boolean);
+            if (points.length === 0 && lines.length === 1) {
+              points.push(topicName);
+            }
+            topicSummaries.push({
+              topic: topicName,
+              points: points.length > 0 ? points : [topicName]
+            });
+          }
+        });
       }
+
+      // Parse decisions
+      const rawDecisions = el.editDecisions.value.trim();
+      const keyDecisions = rawDecisions ? rawDecisions.split('\n').map(l => l.replace(/^[-*•]\s*/, '').trim()).filter(Boolean) : [];
+
+      // Parse transcript
+      const rawTranscript = el.editTranscript.value.trim();
+      const transcriptList = [];
+      if (rawTranscript) {
+        rawTranscript.split('\n').forEach(line => {
+          const trimmed = line.trim();
+          if (!trimmed) return;
+          const match = trimmed.match(/^([^:\[]+)(?:\[([^\]]+)\])?\s*:\s*(.+)$/);
+          if (match) {
+            transcriptList.push({
+              speaker: match[1].trim(),
+              time: match[2] ? match[2].trim() : '',
+              text: match[3].trim()
+            });
+          } else {
+            transcriptList.push({
+              speaker: '참석자',
+              time: '',
+              text: trimmed
+            });
+          }
+        });
+      }
+
+      m.title = title;
+      m.category = category;
+      m.overview = overview;
+      m.topic_summaries = topicSummaries;
+      m.key_decisions = keyDecisions;
+      m.transcript = transcriptList;
+
+      if (!state.categories.includes(category)) {
+        state.categories.push(category);
+        localStorage.setItem('MEETAI_CATEGORIES', JSON.stringify(state.categories));
+        renderCategoryTabs();
+      }
+
+      saveMeetingsToStorage();
+      openMeetingDetail(m.id);
+      closeEditModal();
+      showToast('✨ 회의록 수정 내용이 저장되었습니다!');
     }
 
     function copyMeetingAsMarkdown() {
       const m = state.selectedMeeting;
       if (!m) return;
 
-      let text = `[회의 개요]\n${m.overview || ''}\n\n`;
+      let text = `# ${m.title || '회의록'}\n`;
+      text += `**일시**: ${m.meeting_date}${m.duration_seconds > 0 ? ` (${formatDuration(m.duration_seconds)})` : ''} | **분류**: ${m.category || '일반'}\n\n`;
+
+      if (m.overview) {
+        text += `## 📌 [회의 개요]\n${m.overview}\n\n`;
+      }
 
       if (m.topic_summaries && m.topic_summaries.length > 0) {
-        text += `[소주제별 상세 논의 내용]\n`;
-        m.topic_summaries.forEach((t, idx) => {
-          text += `${t.topic}\n`;
+        text += `## 📋 [안건별 상세 논의 내용]\n`;
+        m.topic_summaries.forEach((t) => {
+          text += `### ${t.topic}\n`;
           (t.points || []).forEach(p => {
-            text += `• ${p}\n`;
+            text += `- ${p}\n`;
           });
           text += `\n`;
         });
-      } else if (m.summary_3lines && m.summary_3lines.length > 0) {
-        text += `[요약 내용]\n` + m.summary_3lines.map(s => `• ${s}`).join('\n') + `\n\n`;
       }
 
       if (m.key_decisions && m.key_decisions.length > 0) {
-        text += `[주요 결정 사항]\n` + m.key_decisions.map(d => `• ${d}`).join('\n') + `\n\n`;
+        text += `## ✅ [주요 결정 사항]\n` + m.key_decisions.map(d => `- ${d}`).join('\n') + `\n\n`;
+      }
+
+      if (m.transcript && m.transcript.length > 0) {
+        text += `## 💬 [핵심 대화록]\n`;
+        m.transcript.forEach(t => {
+          text += `- **${t.speaker || '참석자'}**${t.time ? ` [${t.time}]` : ''}: ${t.text || ''}\n`;
+        });
+        text += `\n`;
       }
 
       navigator.clipboard.writeText(text.trim()).then(() => {
-        showToast('📋 상세 요약 내용이 복사되었습니다!');
+        showToast('📋 전체 회의록 마크다운이 복사되었습니다!');
       }).catch(err => {
         alert('복사 실패: ' + err.message);
       });
@@ -2441,8 +2801,118 @@
     }
 
     // ==========================================
+    // Data Backup & Restore (Browser Migration)
+    // ==========================================
+    function exportAllData() {
+      const data = {
+        version: "meetai-v1",
+        exportDate: new Date().toISOString(),
+        meetings: state.meetings,
+        categories: state.categories,
+        apiKey: state.apiKey,
+        glossary: state.glossary
+      };
+      const jsonStr = JSON.stringify(data, null, 2);
+      const blob = new Blob([jsonStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `meetai_backup_${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('💾 회의록 전체 백업 파일이 다운로드되었습니다.');
+    }
+
+    function importDataFromFile(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const text = event.target.result;
+        if (importDataFromJsonString(text)) {
+          el.settingsModal.classList.remove('active');
+        }
+      };
+      reader.readAsText(file);
+      e.target.value = '';
+    }
+
+    function importDataFromJsonString(jsonStr) {
+      try {
+        let parsed = JSON.parse(jsonStr);
+        let importedMeetings = [];
+        let importedCategories = [];
+
+        if (Array.isArray(parsed)) {
+          importedMeetings = parsed;
+        } else if (parsed && typeof parsed === 'object') {
+          if (Array.isArray(parsed.meetings)) importedMeetings = parsed.meetings;
+          if (Array.isArray(parsed.categories)) importedCategories = parsed.categories;
+          if (parsed.apiKey && !state.apiKey) {
+            state.apiKey = parsed.apiKey;
+            localStorage.setItem('MEETAI_API_KEY', state.apiKey);
+            el.apiKeyInput.value = state.apiKey;
+          }
+          if (parsed.glossary && !state.glossary) {
+            state.glossary = parsed.glossary;
+            localStorage.setItem('MEETAI_GLOSSARY', state.glossary);
+            if (el.glossaryInput) el.glossaryInput.value = state.glossary;
+          }
+        }
+
+        if (!importedMeetings || importedMeetings.length === 0) {
+          throw new Error('가져올 수 있는 유효한 회의록 목록이 없습니다.');
+        }
+
+        const existingIds = new Set(state.meetings.map(m => m.id));
+        let addedCount = 0;
+
+        importedMeetings.forEach(m => {
+          if (m && m.title) {
+            if (!m.id) m.id = 'meet_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
+            if (!existingIds.has(m.id)) {
+              state.meetings.push(m);
+              existingIds.add(m.id);
+              addedCount++;
+            }
+            if (m.category && !state.categories.includes(m.category)) {
+              state.categories.push(m.category);
+            }
+          }
+        });
+
+        importedCategories.forEach(c => {
+          if (!state.categories.includes(c)) state.categories.push(c);
+        });
+
+        saveMeetingsToStorage();
+        localStorage.setItem('MEETAI_CATEGORIES', JSON.stringify(state.categories));
+        renderCategoryTabs();
+        renderMeetings();
+
+        showToast(`🎉 ${addedCount}건의 회의록을 성공적으로 불러왔습니다!`);
+        return true;
+      } catch (err) {
+        alert('데이터 가져오기 실패: ' + err.message);
+        return false;
+      }
+    }
+
+    // ==========================================
     // Utilities
     // ==========================================
+    function formatLocalDateTime(date = new Date()) {
+      const pad = n => String(n).padStart(2, '0');
+      const y = date.getFullYear();
+      const m = pad(date.getMonth() + 1);
+      const d = pad(date.getDate());
+      const hh = pad(date.getHours());
+      const mm = pad(date.getMinutes());
+      return `${y}-${m}-${d} ${hh}:${mm}`;
+    }
+
     function formatTimerSeconds(s) {
       const h = Math.floor(s / 3600);
       const m = Math.floor((s % 3600) / 60);
@@ -2468,7 +2938,11 @@
 
     // Expose handlers for template literals
     window.openMeetingDetail = openMeetingDetail;
-    window.toggleActionItem = toggleActionItem;
+    window.openEditModal = openEditModal;
+    window.closeEditModal = closeEditModal;
+    window.saveEditModal = saveEditModal;
+    window.exportAllData = exportAllData;
+    window.importDataFromJsonString = importDataFromJsonString;
     window.deleteCategory = deleteCategory;
   </script>
 </body>

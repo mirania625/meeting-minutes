@@ -1,4 +1,4 @@
-const CACHE_NAME = 'meetai-v4';
+const CACHE_NAME = 'meetai-v8';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
