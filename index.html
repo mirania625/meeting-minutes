@@ -1351,9 +1351,89 @@
     };
 
     // ==========================================
-    // Init
+    // Init & Android Back Button Management
     // ==========================================
+    let lastBackPressTime = 0;
+
+    function pushModalState(modalName) {
+      try {
+        history.pushState({ meetai_modal: modalName, time: Date.now() }, '');
+      } catch (e) {}
+    }
+
+    function handleBackAction() {
+      // 1. 배터리 세이버 오버레이가 켜져 있는 경우 -> 세이버 해제
+      if (el.batterySaverOverlay && el.batterySaverOverlay.style.display !== 'none') {
+        exitBatterySaver();
+        return;
+      }
+      // 2. 데이터 가져오기 모달이 켜져 있는 경우 -> 닫기
+      if (el.importModal && el.importModal.classList.contains('active')) {
+        el.importModal.classList.remove('active');
+        return;
+      }
+      // 3. 회의록 수정 모달이 켜져 있는 경우 -> 닫기
+      if (el.editModal && el.editModal.classList.contains('active')) {
+        closeEditModal();
+        return;
+      }
+      // 4. 설정 모달이 켜져 있는 경우 -> 닫기
+      if (el.settingsModal && el.settingsModal.classList.contains('active')) {
+        el.settingsModal.classList.remove('active');
+        return;
+      }
+      // 5. 텍스트 입력 모달이 켜져 있는 경우 -> 닫기
+      if (el.textModal && el.textModal.classList.contains('active')) {
+        el.textModal.classList.remove('active');
+        return;
+      }
+      // 6. 녹음 모달이 켜져 있는 경우 -> 닫기 (녹음 중일 시 확인)
+      if (el.recordModal && el.recordModal.classList.contains('active')) {
+        if (state.isRecording) {
+          if (confirm('현재 회의 녹음이 진행 중입니다. 녹음 창을 닫으시겠습니까?\n(녹음은 백그라운드에서 계속 안전하게 유지됩니다)')) {
+            closeRecordModal();
+          }
+        } else {
+          closeRecordModal();
+        }
+        return;
+      }
+      // 7. 회의록 상세 보기 화면인 경우 -> 홈 화면(회의 목록)으로 복귀!
+      if (el.detailModal && el.detailModal.classList.contains('active')) {
+        el.detailModal.classList.remove('active');
+        return;
+      }
+
+      // 8. 홈 화면에서 뒤로가기를 누른 경우 -> 2초 내 재터치 시 앱 종료
+      const now = Date.now();
+      if (now - lastBackPressTime < 2000) {
+        if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App) {
+          window.Capacitor.Plugins.App.exitApp();
+        }
+      } else {
+        lastBackPressTime = now;
+        showToast("'뒤로' 버튼을 한 번 더 누르면 앱이 종료됩니다.");
+        try { history.pushState({ screen: 'home' }, ''); } catch(e){}
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', async () => {
+      // Setup history baseline for smooth mobile back-button handling
+      try {
+        history.replaceState({ screen: 'root' }, '');
+        history.pushState({ screen: 'home' }, '');
+      } catch (e) {}
+
+      window.addEventListener('popstate', (e) => {
+        handleBackAction();
+      });
+
+      if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App) {
+        window.Capacitor.Plugins.App.addListener('backButton', () => {
+          handleBackAction();
+        });
+      }
+
       initListeners();
       renderCategoryTabs();
       renderMeetings();
@@ -1446,10 +1526,12 @@
       if (el.btnOpenTextImport) el.btnOpenTextImport.addEventListener('click', () => {
         el.importJsonText.value = '';
         el.importModal.classList.add('active');
+        pushModalState('import');
       });
       if (el.btnEmptyImport) el.btnEmptyImport.addEventListener('click', () => {
         el.importJsonText.value = '';
         el.importModal.classList.add('active');
+        pushModalState('import');
       });
       if (el.btnCloseImport) el.btnCloseImport.addEventListener('click', () => el.importModal.classList.remove('active'));
       if (el.btnSubmitJsonImport) el.btnSubmitJsonImport.addEventListener('click', () => {
@@ -1758,6 +1840,7 @@
         `).join('');
       }
       el.settingsModal.classList.add('active');
+      pushModalState('settings');
     }
 
     window.deleteCategory = function(idx) {
@@ -1855,6 +1938,7 @@
       renderCategoryTabs();
       el.recordCatCustom.style.display = 'none';
       el.recordModal.classList.add('active');
+      pushModalState('record');
     }
 
     function closeRecordModal() {
@@ -2229,6 +2313,7 @@
       el.directMeetingText.value = '';
       el.textHint.value = '';
       el.textModal.classList.add('active');
+      pushModalState('text');
     }
 
     async function submitTextForAnalysis() {
@@ -2626,6 +2711,7 @@
       if (summaryTabPanel) summaryTabPanel.classList.add('active');
 
       el.detailModal.classList.add('active');
+      pushModalState('detail');
     }
 
     // ==========================================
@@ -2667,6 +2753,7 @@
       }
 
       el.editModal.classList.add('active');
+      pushModalState('edit');
     }
 
     function closeEditModal() {
